@@ -46,8 +46,8 @@ const router = useRouter();
 const errorMessage = ref("");
 
 const loginInfo = ref({
-    email: "greg.satterlee@gmail.com",
-    password: "P#ssw0rd"
+  email: "greg.satterlee@gmail.com",
+  password: "P#ssw0rd",
 });
 
 onMounted(async () => {
@@ -67,13 +67,7 @@ async function login() {
       router.push({ name: "dashboard" });
     }
   } catch (err) {
-    const { status, data } = err.response || {};
-    console.log(data.message);
-    if (status == 401) {
-      errorMessage.value = data.message;
-    } else {
-      errorMessage.value = "";
-    }
+    errorMessage.value = "Invalid user name or password";
   }
 }
 </script>

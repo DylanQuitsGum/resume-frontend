@@ -61,14 +61,15 @@ async function login() {
     errorMessage.value = "";
     const { status, data } = loginStatus || {};
     console.log(data);
+    console.log(status);
     if (status == 200) {
       localStorage.setItem("user", JSON.stringify(data));
       router.push({ name: "dashboard" });
     }
   } catch (err) {
     const { status, data } = err.response || {};
-
-    if (status == 400) {
+    console.log(data.message);
+    if (status == 401) {
       errorMessage.value = data.message;
     } else {
       errorMessage.value = "";

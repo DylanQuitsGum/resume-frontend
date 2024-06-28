@@ -20,6 +20,34 @@
           ></v-text-field>
 
           <v-text-field
+            v-model="user.street"
+            label="Street"
+            variant="outlined"
+            required
+          ></v-text-field>
+
+          <v-text-field
+            v-model="user.city"
+            label="City"
+            variant="outlined"
+            required
+          ></v-text-field>
+
+          <v-text-field
+            v-model="user.state"
+            label="State"
+            variant="outlined"
+            required
+          ></v-text-field>
+
+          <v-text-field
+            v-model="user.zipCode"
+            label="Zip"
+            variant="outlined"
+            required
+          ></v-text-field>
+
+          <v-text-field
             v-model="user.email"
             label="Email"
             variant="outlined"
@@ -52,27 +80,47 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import { useRouter } from "vue-router";
+import authServices from "@/services/authServices";
 
 const router = useRouter();
 const errorMessage = ref("");
 
 const user = ref({
-  firstName: "",
-  lastName: "",
-  email: "",
-  password: "",
+  firstName: "Greg",
+  lastName: "Satterlee",
+  street: "13801 S Independence Ave",
+  city: "OKC",
+  state: "OK",
+  zipCode: "73170",
+  email: "greg.satterlee@gmail.com",
+  password: "P#ssw0rd",
 });
 
 async function createAccount() {
+  try{
+    const response = await authServices.signup(user);
 
+    const { status } = response;
+
+    if(status == 200){
+      router.push("login");
+    }
+
+  } catch(err) {
+    const { status, data } = err.response;
+    if (status == 400) {
+      errorMessage.value = data.message;
+    } else {
+      errorMessage.value = "";
+    }
+  }
 }
 </script>
 
 <style scoped>
 .container {
-  background: url("./../assets/bg4.jpeg");
   background-repeat: no-repeat;
   background-size: cover;
   height: 100%;

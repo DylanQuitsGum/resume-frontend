@@ -13,12 +13,11 @@
     <v-app-bar-title>Resume Builder</v-app-bar-title>
 
     <v-btn class="mx-2" :to="{ name: 'register' }"> Register </v-btn>
-
+    <v-btn class="mx-2" :to="{ name: 'login' }"> Login </v-btn>
   </v-app-bar>
 </template>
 
 <script setup>
-  import { ref, onMounted } from 'vue';
   import { useRouter } from 'vue-router';
 
   const router = useRouter();

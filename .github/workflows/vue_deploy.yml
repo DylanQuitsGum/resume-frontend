@@ -2,8 +2,7 @@ name: AWS DEPLOY TO STAGING
 
 #turn off deploy to AWS
 on:
-  pull_request:
-    types: [closed]
+  push:
     branches:
       - dev
 
@@ -13,14 +12,13 @@ jobs:
     #For google auth
 
     steps:
+      - name: Checkout code
       - uses: actions/checkout@v3
-        # may need to change to version 3
+        
+      - name: Install Node.js
+        uses: actions/setup-node@v3
         with:
-          ref: dev
-      - uses: actions/setup-node@v3
-        #May need to change to version 18
-        with:
-          node-version: 20
+          node-version: "20"
 
       - run: npm install
       - run: npm run build

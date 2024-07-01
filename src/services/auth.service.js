@@ -7,6 +7,9 @@ export default {
       password: user.password,
     });
   },
+  async signout(){
+    localStorage.removeItem('user');
+  },
   async register(user) {
     return await apiClient.post("auth/signup", user);
   },

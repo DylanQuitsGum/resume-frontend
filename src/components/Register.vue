@@ -1,6 +1,6 @@
 <template>
   <v-container class="container d-flex align-center justify-center" fluid>
-    <v-form @submit.prevent="createAccount">
+    <v-form @submit.prevent="signup">
       <v-card class="card rounded-md elevation-1">
         <v-card-title class="headline mb-2">Register </v-card-title>
 
@@ -8,6 +8,13 @@
           <v-text-field
             v-model="user.firstName"
             label="First Name"
+            variant="outlined"
+            required
+          ></v-text-field>
+
+          <v-text-field
+            v-model="user.lastName"
+            label="Last Name"
             variant="outlined"
             required
           ></v-text-field>
@@ -42,7 +49,7 @@
 
           <v-text-field
             v-model="user.zipCode"
-            label="Zip"
+            label="Zip Code"
             variant="outlined"
             required
           ></v-text-field>
@@ -80,64 +87,85 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { useRouter } from "vue-router";
-import authServices from "@/services/authServices";
+  import { ref } from 'vue';
+  import { useRouter } from 'vue-router'
+  import authService from '@/services/auth.service';
 
-const router = useRouter();
-const errorMessage = ref("");
+  const router = useRouter();
+  const errorMessage = ref("");
 
-const user = ref({
-  firstName: "Greg",
-  lastName: "Satterlee",
-  street: "13801 S Independence Ave",
-  city: "OKC",
-  state: "OK",
-  zipCode: "73170",
-  email: "greg.satterlee@gmail.com",
-  password: "P#ssw0rd",
-});
+  const user = ref({
+    firstName: "Greg",
+    lastName: "Satterlee",
+    email: "greg.satterlee@gmail.com",
+    street: "13801 S Independence Ave",
+    city: "Oklahoma City",
+    state: "OK",
+    zipCode: "73170",
+    password: "P#ssw0rd"
+  });
 
-async function createAccount() {
-  try{
-    const response = await authServices.signup(user);
-
-    const { status } = response;
-
-    if(status == 200){
-      router.push("login");
-    }
-
-  } catch(err) {
-    const { status, data } = err.response;
-    if (status == 400) {
-      errorMessage.value = data.message;
-    } else {
+  async function signup(){
+    try{
+      const data = await authService.register(user.value);
       errorMessage.value = "";
+
+      const { status }  = data;
+      console.log(data);
+      if(status == 200){
+        router.push({
+          path: "/login"
+        });
+      }
+    }catch(err){
+      console.log('in catch')
+      const { status, data } = err.response;
+      errorMessage.value = data.message;
     }
   }
-}
+
 </script>
 
+
 <style scoped>
-.container {
-  background-repeat: no-repeat;
-  background-size: cover;
-  height: 100%;
+label {
+  display: block;
+  margin-top: 10px;
+}
+
+.v-card-text{
+  width: 350px;
+}
+
+.card-container.card {
+  max-width: 350px !important;
+  padding: 40px 40px;
 }
 
 .card {
-  width: 400px;
-  padding: 32px 16px;
+  background-color: #f7f7f7;
+  padding: 20px 25px 30px;
+  margin: 0 auto 25px;
+  margin-top: 50px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
+  -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
 }
 
-.text-field {
-  background-color: white;
+.profile-img-card {
+  width: 96px;
+  height: 96px;
+  margin: 0 auto 10px;
+  display: block;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
 }
 
-.login-btn {
-  width: 100%;
-  background-color: #0093e9;
-  background-image: linear-gradient(160deg, #0093e9 0%, #80d0c7 100%);
+.error-feedback {
+  color: red;
 }
 </style>

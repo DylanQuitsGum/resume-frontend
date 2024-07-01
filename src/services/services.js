@@ -1,8 +1,11 @@
 import axios from "axios";
 
-var baseurl = (process.env.NODE_ENV === "development")
-                        ? baseurl = "http://localhost:3201/resumeapi/"
-                        : baseurl = "https://107.23.63.118:3201/resumeapi/";
+var baseurl = "";
+if (process.env.NODE_ENV === "development") {
+  baseurl = "http://localhost:3201/resumeapi/";
+} else {
+  baseurl = "https://107.23.63.118:3201/api/";
+}
 
 const apiClient = axios.create({
   baseURL: baseurl,

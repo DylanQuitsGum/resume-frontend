@@ -27,7 +27,7 @@
               class="login-btn rounded-xl"
               variant="flat"
               color="primary"
-              @click="signin()"
+              @click="signin"
               >Login</v-btn
             >
           </v-card-actions>
@@ -58,20 +58,20 @@ const user = ref({
 async function signin(){
   try{
     const data = await authService.signin(user.value);
+    console.log(user.value);
     errorMessage.value = "";
-
-    const { status }  = data;
     console.log(data);
+
+    const { status }  = data.value;
     if(status == 200){
-      localStorage.setItem("user", JSON.stringify(data));
       router.push({
         path: "/user"
       });
     }
   }catch(err){
-    const { status, data } = err.response;
-    console.log(status);
-    console.log(data);
+    console.log(err);
+    const { data } = err.response;
+
     errorMessage.value = data.message;
   }
 }

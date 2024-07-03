@@ -38,10 +38,9 @@
 
 <script setup>
 import { ref } from 'vue';
-import { useRouter } from 'vue-router'
 import authService from '@/services/auth.service';
+import router from '../router'
 
-const router = useRouter();
 const errorMessage = ref("");
 
 const user = ref({
@@ -58,16 +57,9 @@ const user = ref({
 async function signin(){
   try{
     const data = await authService.signin(user.value);
-    console.log(user.value);
     errorMessage.value = "";
-    console.log(data);
 
-    const { status }  = data.value;
-    if(status == 200){
-      router.push({
-        path: "/user"
-      });
-    }
+    router.push({name: "home"});
   }catch(err){
     console.log(err);
     const { data } = err.response;

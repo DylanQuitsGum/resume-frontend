@@ -9,13 +9,20 @@
             </router-link>
           </v-btn>
         </template>
-        <v-app-bar-title>{{applicationTitle}}</v-app-bar-title>
+        <v-app-bar-title>{{ applicationTitle }}</v-app-bar-title>
 
         <template v-slot:append>
           <div v-if="!currentUser">
             <v-btn>
               <router-link to="/register" class="nav-link">
                 <font-awesome-icon icon="user-plus" /> Sign Up
+              </router-link>
+            </v-btn>
+          </div>
+          <div v-if="currentUser">
+            <v-btn>
+              <router-link to="/profile" class="nav-link">
+                <font-awesome-icon icon="user" /> Profile
               </router-link>
             </v-btn>
           </div>
@@ -28,7 +35,7 @@
           </div>
           <div v-if="currentUser">
             <v-btn v-on:click="signout">
-                <font-awesome-icon icon="sign-out-alt" /> Sign Out                
+              <font-awesome-icon icon="sign-out-alt" /> Sign Out
             </v-btn>
           </div>
         </template>
@@ -44,20 +51,20 @@
 </template>
 
 <script>
-import authService from './services/auth.service';
+import authService from "./services/auth.service";
+import router from './router'
 
 export default {
-
   computed: {
     currentUser() {
       const user = this.$store.state.auth.user;
       return user;
     },
-    applicationTitle(){
+    applicationTitle() {
       const user = this.$store.state.auth.user;
-      if(user){
+      if (user) {
         return "Resume Application: " + user.email;
-      }else{
+      } else {
         return "Resume Application";
       }
     },
@@ -72,7 +79,7 @@ export default {
   methods: {
     signout() {
       authService.signout();
-      this.$router.push("/home");
+      router.push({ name: "home" });
       this.$forceUpdate();
     },
   },

@@ -1,14 +1,10 @@
 import axios from "axios";
 
-var serverMode = import.meta.env.SSR;
-
-console.log(serverMode);
-
 var baseurl = "";
-if (!serverMode) {
+if (process.env.NODE_ENV == 'development') {
   baseurl = "http://localhost:3201/resumeapi/";
 } else {
-  baseurl = "https://3.142.71.232:3201/resumeapi/";
+  baseurl = "http://3.142.71.232:3201/resumeapi/";
 }
 
 console.log(baseurl);

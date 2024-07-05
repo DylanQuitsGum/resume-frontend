@@ -26,7 +26,7 @@ export default {
     });
   },
 
-  delete({ userId, id }) {
+  delete(userId, id) {
     return apiClient.delete(`users/${userId}/education/${id}`, {
       headers: authHeader(),
     });

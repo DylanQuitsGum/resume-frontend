@@ -4,6 +4,8 @@ import Login from "./components/Login.vue";
 import Register from "./components/Register.vue";
 
 const AddEducation = () => import("./components/AddEducation.vue");
+const EditEducation = () => import("./components/EditEducation.vue");
+
 const Profile = () => import("./components/Profile.vue");
 const BoardAdmin = () => import("./components/BoardAdmin.vue");
 const BoardUser = () => import("./components/BoardUser.vue");
@@ -117,6 +119,23 @@ const routes = [
       next();
     }
   },
+  {
+    path: "/editEducation/:id",
+    name: "editEducation",
+    meta: { requiresAuth: true },
+    component: EditEducation,
+    beforeEnter: (to, from, next) => {
+      const user = JSON.parse(localStorage.getItem("user"));
+      if(!user){
+        next(
+          {
+            name: "login"
+          }
+        );
+      }
+      next();
+    }
+  }
 ];
 
 const router = createRouter({

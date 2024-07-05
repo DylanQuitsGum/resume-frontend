@@ -24,7 +24,7 @@
         </v-data-table>
 
         <v-card-actions v-if="educations.length > 0">
-          <v-btn small color="error" @click="removeAllEducation">
+          <v-btn small color="error" @click="removeAllEducations">
             Remove All
           </v-btn>
         </v-card-actions>
@@ -36,7 +36,6 @@
 <script>
 import EducationServices from "../services/education.service";
 import router from "../router";
-import { onMounted } from "vue";
 
 export default {
   data() {
@@ -56,7 +55,6 @@ export default {
     };
   },
   async mounted() {
-    console.log("onMounted");
     this.retrieveEducations();
   },
   methods: {
@@ -67,7 +65,6 @@ export default {
       router.push({ path: "addEducation" });
     },
     retrieveEducations() {
-      console.log("retrieving education");
       const user = JSON.parse(localStorage.getItem("user"));
       EducationServices.getAll(user.id)
         .then((response) => {
@@ -90,12 +87,13 @@ export default {
     },
 
     editEducation(id) {
-      this.$router.push({ name: "education-details", params: { id: id } });
+      console.log(`Edit: ${id}`);
+      router.push({ path: `editEducation/${id}`});
     },
 
-    deleteCharacter(id) {
+    deleteEducation(id) {
       const user = JSON.parse(localStorage.getItem("user"));
-      EducationServices.delete({ userId: user.id, educationId: id })
+      EducationServices.delete(user.id, id)
         .then(() => {
           this.refreshEducations();
         })

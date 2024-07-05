@@ -25,21 +25,21 @@ const apiClient = axios.create({
 });
 
 // Add a request interceptor
-// apiClient.interceptors.request.use(
-//   (config) => {
-//     const storedUser = localStorage.getItem("user");
-//     if (storedUser) {
-//       const user = JSON.parse(storedUser);
-//       if (user.accessToken) {
-//         config.headers.Authorization = `Bearer ${user.accessToken}`;
-//       }
-//     }
+apiClient.interceptors.request.use(
+  (config) => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      const user = JSON.parse(storedUser);
+      if (user.accessToken) {
+        config.headers.Authorization = `Bearer ${user.accessToken}`;
+      }
+    }
 
-//     return config;
-//   },
-//   (error) => {
-//     return Promise.reject(error);
-//   }
-// );
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 export default apiClient;

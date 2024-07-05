@@ -6,6 +6,9 @@ import Register from "./components/Register.vue";
 const AddEducation = () => import("./components/AddEducation.vue");
 const EditEducation = () => import("./components/EditEducation.vue");
 
+const AddAward = () => import("./components/AddAward.vue");
+const EditAward = () => import("./components/EditAward.vue");
+
 const Profile = () => import("./components/Profile.vue");
 const BoardAdmin = () => import("./components/BoardAdmin.vue");
 const BoardUser = () => import("./components/BoardUser.vue");
@@ -124,6 +127,40 @@ const routes = [
     name: "editEducation",
     meta: { requiresAuth: true },
     component: EditEducation,
+    beforeEnter: (to, from, next) => {
+      const user = JSON.parse(localStorage.getItem("user"));
+      if(!user){
+        next(
+          {
+            name: "login"
+          }
+        );
+      }
+      next();
+    }
+  },
+  {
+    path: "/addAward",
+    name: "addaward",
+    meta: { requiresAuth: true },
+    component: AddAward,
+    beforeEnter: (to, from, next) => {
+      const user = JSON.parse(localStorage.getItem("user"));
+      if(!user){
+        next(
+          {
+            name: "login"
+          }
+        );
+      }
+      next();
+    }
+  },
+  {
+    path: "/editAward/:id",
+    name: "editAward",
+    meta: { requiresAuth: true },
+    component: EditAward,
     beforeEnter: (to, from, next) => {
       const user = JSON.parse(localStorage.getItem("user"));
       if(!user){

@@ -8,7 +8,7 @@
       <v-card class="mx-auto" tile>
         <v-card-title>Education</v-card-title>
         <v-data-table
-          :headers="headers"
+          :headers="educationheaders"
           :items="educations"
           disable-pagination
           :hide-default-footer="true"
@@ -31,18 +31,53 @@
       </v-card>
     </v-col>
   </v-row>
+  <v-row align="center" class="list px-3 mx-auto">
+    <v-col cols="12" md="4">
+      <v-btn small @click="addAward"> Add Award </v-btn>
+    </v-col>
+
+    <v-col cols="12" sm="12">
+      <v-card class="mx-auto" tile>
+        <v-card-title>Award</v-card-title>
+        <v-data-table
+          :headers="awardHeaders"
+          :items="awards"
+          disable-pagination
+          :hide-default-footer="true"
+        >
+          <template v-slot:[`item.actions`]="{ item }">
+            <v-icon small class="mr-2" @click="editAward(item.id)"
+              >mdi-pencil</v-icon
+            >
+            <v-icon small class="mr-2" @click="deleteAward(item.id)"
+              >mdi-delete</v-icon
+            >
+          </template>
+        </v-data-table>
+
+        <v-card-actions v-if="awards.length > 0">
+          <v-btn small color="error" @click="removeAllAwards">
+            Remove All
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
 import EducationServices from "../services/education.service";
+import AwardServices from "../services/award.service";
+
 import router from "../router";
 
 export default {
   data() {
     return {
       educations: [],
+      awards: [],
       title: "",
-      headers: [
+      educationHeaders: [
         {
           text: "Institution",
           align: "start",
@@ -52,10 +87,21 @@ export default {
         { text: "City", value: "city", sortable: false },
         { text: "Actions", value: "actions", sortable: false },
       ],
+      awardHeaders: [
+        {
+          text: "Name",
+          align: "start",
+          sortable: false,
+          value: "awardName",
+        },
+        { text: "Award Date", value: "dateAwarded", sortable: false },
+        { text: "Actions", value: "actions", sortable: false },
+      ],
     };
   },
   async mounted() {
     this.retrieveEducations();
+    this.retrieveAwards();
   },
   methods: {
     refreshEducations() {
@@ -108,7 +154,58 @@ export default {
         institutionName: education.institutionName,
         city: education.city,
       };
-    }
+    },
+    refreshAwards() {
+      this.retrieveAwards();
+    },
+    addAward() {
+      router.push({ path: "addAward" });
+    },
+    retrieveAwards() {
+      const user = JSON.parse(localStorage.getItem("user"));
+      AwardServices.getAll(user.id)
+        .then((response) => {
+          console.log(response);
+          this.awards = response.data.map(this.getDisplayAward);
+        })
+        .catch((e) => {
+          
+        });
+    },
+    removeAllAwards() {
+      const user = JSON.parse(localStorage.getItem("user"));
+      AwardServices.deleteAll(user.id)
+        .then((response) => {
+          this.refreshAwards();
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+
+    editAward(id) {
+      console.log(`Edit: ${id}`);
+      router.push({ path: `editAward/${id}`});
+    },
+
+    deleteAward(id) {
+      const user = JSON.parse(localStorage.getItem("user"));
+      AwardServices.delete(user.id, id)
+        .then(() => {
+          this.refreshAwards();
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    getDisplayAward(award) {
+      console.log(award);
+      return {
+        id: award.id,
+        awardName: award.awardName,
+        dateAwarded: award.dateAwarded,
+      };
+    },
   },
 };
 </script>

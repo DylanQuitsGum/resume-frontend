@@ -27,7 +27,7 @@
               class="login-btn rounded-xl"
               variant="flat"
               color="primary"
-              @click="signin()"
+              @click="signin"
               >Login</v-btn
             >
           </v-card-actions>
@@ -38,10 +38,9 @@
 
 <script setup>
 import { ref } from 'vue';
-import { useRouter } from 'vue-router'
 import authService from '@/services/auth.service';
+import router from '../router'
 
-const router = useRouter();
 const errorMessage = ref("");
 
 const user = ref({
@@ -60,18 +59,11 @@ async function signin(){
     const data = await authService.signin(user.value);
     errorMessage.value = "";
 
-    const { status }  = data;
-    console.log(data);
-    if(status == 200){
-      localStorage.setItem("user", JSON.stringify(data));
-      router.push({
-        path: "/user"
-      });
-    }
+    router.push({name: "home"});
   }catch(err){
-    const { status, data } = err.response;
-    console.log(status);
-    console.log(data);
+    console.log(err);
+    const { data } = err.response;
+
     errorMessage.value = data.message;
   }
 }

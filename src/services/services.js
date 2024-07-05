@@ -1,11 +1,17 @@
 import axios from "axios";
 
+var serverMode = import.meta.env.SSR;
+
+console.log(serverMode);
+
 var baseurl = "";
-if (process.env.NODE_ENV === "development") {
+if (!serverMode) {
   baseurl = "http://localhost:3201/resumeapi/";
 } else {
-  baseurl = "https://107.23.63.118:3201/api/";
+  baseurl = "https://3.142.71.232:3201/resumeapi/";
 }
+
+console.log(baseurl);
 
 const apiClient = axios.create({
   baseURL: baseurl,
@@ -19,21 +25,21 @@ const apiClient = axios.create({
 });
 
 // Add a request interceptor
-apiClient.interceptors.request.use(
-  (config) => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      const user = JSON.parse(storedUser);
-      if (user.token) {
-        config.headers.Authorization = `Bearer ${user.token}`;
-      }
-    }
+// apiClient.interceptors.request.use(
+//   (config) => {
+//     const storedUser = localStorage.getItem("user");
+//     if (storedUser) {
+//       const user = JSON.parse(storedUser);
+//       if (user.accessToken) {
+//         config.headers.Authorization = `Bearer ${user.accessToken}`;
+//       }
+//     }
 
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
+//     return config;
+//   },
+//   (error) => {
+//     return Promise.reject(error);
+//   }
+// );
 
 export default apiClient;

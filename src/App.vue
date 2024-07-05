@@ -1,6 +1,5 @@
 <template>
-  <v-card class="mx-auto"
-          elevation="16">
+  <v-card class="mx-auto" elevation="16">
     <v-layout>
       <v-app-bar color="primary" density="compact">
         <template v-slot:prepend>
@@ -10,7 +9,7 @@
             </router-link>
           </v-btn>
         </template>
-        <v-app-bar-title>Resume Application</v-app-bar-title>
+        <v-app-bar-title>{{ applicationTitle }}</v-app-bar-title>
 
         <template v-slot:append>
           <div v-if="!currentUser">
@@ -20,24 +19,29 @@
               </router-link>
             </v-btn>
           </div>
-          <div  v-if="!currentUser">
+          <div v-if="currentUser">
+            <v-btn>
+              <router-link to="/profile" class="nav-link">
+                <font-awesome-icon icon="user" /> Profile
+              </router-link>
+            </v-btn>
+          </div>
+          <div v-if="!currentUser">
             <v-btn>
               <router-link to="/login" class="nav-link">
                 <font-awesome-icon icon="sign-in-alt" /> Sign In
               </router-link>
             </v-btn>
           </div>
-          <div  v-if="currentUser">
-            <v-btn>
-              <router-link to="/login" class="nav-link">
-                <font-awesome-icon icon="sign-out-alt" /> Sign Out
-              </router-link>
+          <div v-if="currentUser">
+            <v-btn v-on:click="signout">
+              <font-awesome-icon icon="sign-out-alt" /> Sign Out
             </v-btn>
           </div>
         </template>
       </v-app-bar>
 
-      <v-main >
+      <v-main>
         <div class="container">
           <router-view />
         </div>
@@ -47,11 +51,22 @@
 </template>
 
 <script>
+import authService from "./services/auth.service";
+import router from './router'
 
 export default {
   computed: {
     currentUser() {
-      return this.$store.state.auth.user;
+      const user = this.$store.state.auth.user;
+      return user;
+    },
+    applicationTitle() {
+      const user = this.$store.state.auth.user;
+      if (user) {
+        return "Resume Application: " + user.email;
+      } else {
+        return "Resume Application";
+      }
     },
     showAdminBoard() {
       if (this.currentUser && this.currentUser["roles"]) {
@@ -60,18 +75,12 @@ export default {
 
       return true;
     },
-    showModeratorBoard() {
-      if (this.currentUser && this.currentUser["roles"]) {
-        return this.currentUser["roles"].includes("ROLE_MODERATOR");
-      }
-
-      return false;
-    },
   },
   methods: {
-    logOut() {
-      this.$store.dispatch("auth/logout");
-      this.$router.push("/login");
+    signout() {
+      authService.signout();
+      router.push({ name: "home" });
+      this.$forceUpdate();
     },
   },
 };

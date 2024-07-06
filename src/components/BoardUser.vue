@@ -1,4 +1,36 @@
 <template>
+    <v-row align="center" class="list px-3 mx-auto">
+    <v-col cols="12" md="4">
+      <v-btn small @click="addEmployer"> Add Employer </v-btn>
+    </v-col>
+
+    <v-col cols="12" sm="12">
+      <v-card class="mx-auto" tile>
+        <v-card-title>Employer</v-card-title>
+        <v-data-table
+          :headers="employerheaders"
+          :items="employers"
+          disable-pagination
+          :hide-default-footer="true"
+        >
+          <template v-slot:[`item.actions`]="{ item }">
+            <v-icon small class="mr-2" @click="editEmployer(item.id)"
+              >mdi-pencil</v-icon
+            >
+            <v-icon small class="mr-2" @click="deleteEmployer(item.id)"
+              >mdi-delete</v-icon
+            >
+          </template>
+        </v-data-table>
+
+        <v-card-actions v-if="employers.length > 0">
+          <v-btn small color="error" @click="removeAllEmployers">
+            Remove All
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-col>
+  </v-row>
   <v-row align="center" class="list px-3 mx-auto">
     <v-col cols="12" md="4">
       <v-btn small @click="addEducation"> Add Education </v-btn>
@@ -66,6 +98,7 @@
 </template>
 
 <script>
+import EmployerServices from "../services/employer.service";
 import EducationServices from "../services/education.service";
 import AwardServices from "../services/award.service";
 
@@ -74,9 +107,20 @@ import router from "../router";
 export default {
   data() {
     return {
+      employers: [],
       educations: [],
       awards: [],
       title: "",
+      employerHeaders: [
+        {
+          text: "Employer",
+          align: "start",
+          sortable: false,
+          value: "employerName",
+        },
+        { text: "City", value: "city", sortable: false },
+        { text: "Actions", value: "actions", sortable: false },
+      ],
       educationHeaders: [
         {
           text: "Institution",
@@ -100,10 +144,64 @@ export default {
     };
   },
   async mounted() {
+    this.retrieveEmployers();
     this.retrieveEducations();
     this.retrieveAwards();
   },
   methods: {
+    refreshEmployers() {
+      this.retrieveEmployers();
+    },
+    addEmployer() {
+      router.push({ path: "addEmployer" });
+    },
+    retrieveEmployers() {
+      const user = JSON.parse(localStorage.getItem("user"));
+      EmployerServices.getAll(user.id)
+        .then((response) => {
+          this.employers = response.data.map(this.getDisplayEmployer);
+        })
+        .catch((e) => {
+          
+        });
+    },
+    removeAllEmployers() {
+      const user = JSON.parse(localStorage.getItem("user"));
+      EmployerServices.deleteAll(user.id)
+        .then((response) => {
+          this.refreshEmployers();
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+
+    editEmployer(id) {
+      router.push({ path: `editEmployer/${id}`});
+    },
+
+    deleteEmployer(id) {
+      const user = JSON.parse(localStorage.getItem("user"));
+      EmployerServices.delete(user.id, id)
+        .then(() => {
+          this.refreshEmployers();
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    getDisplayEmployer(employer) {
+      console.log(`DisplayEmployer: ${employer}`)
+      return {
+        id: employer.id,
+        employerName: employer.employerName,
+        city: employer.city,
+      };
+    },
+
+
+
+
     refreshEducations() {
       this.retrieveEducations();
     },
@@ -114,7 +212,6 @@ export default {
       const user = JSON.parse(localStorage.getItem("user"));
       EducationServices.getAll(user.id)
         .then((response) => {
-          console.log(response);
           this.educations = response.data.map(this.getDisplayEducation);
         })
         .catch((e) => {
@@ -133,7 +230,6 @@ export default {
     },
 
     editEducation(id) {
-      console.log(`Edit: ${id}`);
       router.push({ path: `editEducation/${id}`});
     },
 
@@ -148,7 +244,6 @@ export default {
         });
     },
     getDisplayEducation(education) {
-      console.log(education);
       return {
         id: education.id,
         institutionName: education.institutionName,
@@ -165,7 +260,6 @@ export default {
       const user = JSON.parse(localStorage.getItem("user"));
       AwardServices.getAll(user.id)
         .then((response) => {
-          console.log(response);
           this.awards = response.data.map(this.getDisplayAward);
         })
         .catch((e) => {
@@ -184,7 +278,6 @@ export default {
     },
 
     editAward(id) {
-      console.log(`Edit: ${id}`);
       router.push({ path: `editAward/${id}`});
     },
 
@@ -199,7 +292,6 @@ export default {
         });
     },
     getDisplayAward(award) {
-      console.log(award);
       return {
         id: award.id,
         awardName: award.awardName,

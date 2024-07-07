@@ -51,6 +51,7 @@
             v-model="user.zipCode"
             label="Zip Code"
             variant="outlined"
+            :rules="zipCodeRules"
             required
           ></v-text-field>
 
@@ -58,6 +59,7 @@
             v-model="user.email"
             label="Email"
             variant="outlined"
+            :rules="emailRules"
             required
           ></v-text-field>
 
@@ -87,45 +89,53 @@
 </template>
 
 <script setup>
-  import { ref } from 'vue';
-  import { useRouter } from 'vue-router'
-  import authService from '@/services/auth.service';
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import authService from "@/services/auth.service";
 
-  const router = useRouter();
-  const errorMessage = ref("");
+const router = useRouter();
+const errorMessage = ref("");
 
-  const user = ref({
-    firstName: "Greg",
-    lastName: "Satterlee",
-    email: "greg.satterlee@gmail.com",
-    street: "13801 S Independence Ave",
-    city: "Oklahoma City",
-    state: "OK",
-    zipCode: "73170",
-    password: "P#ssw0rd"
-  });
+const emailRules = [
+v => !!v || 'E-mail is required',
+v => /^(([^<>()[\]\\.,;:\s@']+(\.[^<>()\\[\]\\.,;:\s@']+)*)|('.+'))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(v) || 'E-mail must be valid',
+];
 
-  async function signup(){
-    try{
-      const data = await authService.register(user.value);
-      errorMessage.value = "";
+const zipCodeRules = [
+v => !!v || 'ZipCode is required',
+v => /(^\d{5}$)|(^\d{5}-\d{4}$)/.test("90210") || 'Zip Code must be valid',
+];
 
-      const { status }  = data;
-      console.log(data);
-      if(status == 200){
-        router.push({
-          path: "/login"
-        });
-      }
-    }catch(err){
-      console.log('in catch')
-      const { status, data } = err.response;
-      errorMessage.value = data.message;
+const user = ref({
+  firstName: "Greg",
+  lastName: "Satterlee",
+  email: "greg.satterlee@gmail.com",
+  street: "13801 S Independence Ave",
+  city: "Oklahoma City",
+  state: "OK",
+  zipCode: "73170",
+  password: "P#ssw0rd",
+});
+
+async function signup() {
+  try {
+    const data = await authService.register(user.value);
+    errorMessage.value = "";
+
+    const { status } = data;
+    console.log(data);
+    if (status == 200) {
+      router.push({
+        path: "/login",
+      });
     }
+  } catch (err) {
+    console.log("in catch");
+    const { status, data } = err.response;
+    errorMessage.value = data.message;
   }
-
+}
 </script>
-
 
 <style scoped>
 label {
@@ -133,7 +143,7 @@ label {
   margin-top: 10px;
 }
 
-.v-card-text{
+.v-card-text {
   width: 350px;
 }
 

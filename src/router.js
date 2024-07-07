@@ -12,6 +12,9 @@ const EditEducation = () => import("./components/EditEducation.vue");
 const AddAward = () => import("./components/AddAward.vue");
 const EditAward = () => import("./components/EditAward.vue");
 
+const AddSkill = () => import("./components/AddSkill.vue");
+const EditSkill = () => import("./components/EditSkill.vue");
+
 const Profile = () => import("./components/Profile.vue");
 const BoardAdmin = () => import("./components/BoardAdmin.vue");
 const BoardUser = () => import("./components/BoardUser.vue");
@@ -199,6 +202,40 @@ const routes = [
     name: "editAward",
     meta: { requiresAuth: true },
     component: EditAward,
+    beforeEnter: (to, from, next) => {
+      const user = JSON.parse(localStorage.getItem("user"));
+      if(!user){
+        next(
+          {
+            name: "login"
+          }
+        );
+      }
+      next();
+    }
+  },
+  {
+    path: "/addSkill",
+    name: "addskill",
+    meta: { requiresAuth: true },
+    component: AddSkill,
+    beforeEnter: (to, from, next) => {
+      const user = JSON.parse(localStorage.getItem("user"));
+      if(!user){
+        next(
+          {
+            name: "login"
+          }
+        );
+      }
+      next();
+    }
+  },
+  {
+    path: "/editSkill/:id",
+    name: "editSkill",
+    meta: { requiresAuth: true },
+    component: EditSkill,
     beforeEnter: (to, from, next) => {
       const user = JSON.parse(localStorage.getItem("user"));
       if(!user){

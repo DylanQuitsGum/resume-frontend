@@ -21,6 +21,13 @@
           </div>
           <div v-if="currentUser">
             <v-btn>
+              <router-link to="/resumeBuilder" class="nav-link">
+                <font-awesome-icon icon="user" /> Build Resume
+              </router-link>
+            </v-btn>
+          </div>
+          <div v-if="currentUser">
+            <v-btn>
               <router-link to="/profile" class="nav-link">
                 <font-awesome-icon icon="user" /> Profile
               </router-link>

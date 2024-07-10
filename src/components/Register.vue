@@ -64,6 +64,14 @@
           ></v-text-field>
 
           <v-text-field
+            v-model="user.phoneNumber"
+            label="Phone"
+            variant="outlined"
+            :rules="phoneRules"
+            required
+          ></v-text-field>
+
+          <v-text-field
             v-model="user.password"
             label="Password"
             variant="outlined"
@@ -103,7 +111,12 @@ v => /^(([^<>()[\]\\.,;:\s@']+(\.[^<>()\\[\]\\.,;:\s@']+)*)|('.+'))@((\[[0-9]{1,
 
 const zipCodeRules = [
 v => !!v || 'ZipCode is required',
-v => /(^\d{5}$)|(^\d{5}-\d{4}$)/.test("90210") || 'Zip Code must be valid',
+v => /(^\d{5}$)|(^\d{5}-\d{4}$)/.test(v) || 'Zip Code must be valid',
+];
+
+const phoneRules = [
+  v => !!v || 'Phone is required',
+  v => /^(1[ -]?)?\d{3}[ -]?\d{3}[ -]?\d{4}$/.test(v) || 'Phone must be valid',
 ];
 
 const user = ref({
@@ -114,6 +127,7 @@ const user = ref({
   city: "Oklahoma City",
   state: "OK",
   zipCode: "73170",
+  phoneNumber: "(405) 863-6222",
   password: "P#ssw0rd",
 });
 

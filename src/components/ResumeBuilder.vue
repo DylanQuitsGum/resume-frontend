@@ -4,25 +4,15 @@
       <v-stepper :items="['Step 1', 'Step 2', 'Step 3', 'Step 4', 'Step 5']">
         <template v-slot:item.1>
           <v-card title="Select Education History" elevation="10">
-            <v-data-table-virtual
-                :loading="educationLoading"
-                :headers="educationHeaders"
-                :items="educations"
-                disable-pagination
-                :hide-default-footer="true"    
-            >
-                <template v-slot:['item.actions']="{ item }">
-                    <v-checkbox @click="selectedEducations(item.id)"></v-checkbox>
-                </template>
+            <v-data-table-virtual :items="userEducations"
+              disable-pagination :hide-default-footer="true">
+              <template v-slot:['item.actions']="{ item }">
+                
+              </template>
             </v-data-table-virtual>
 
             <v-card-actions>
-                <v-btn v-if="educations.length > 0" 
-                       small color="error"
-                       @click="toggleSelectAllEducation"
-                       >
-                       Select All
-                </v-btn>
+
             </v-card-actions>
 
           </v-card>
@@ -48,7 +38,41 @@
   </v-app>
 </template>
 
-<script>
+<script setup>
+import EducationService from "@/services/education.service";
+import { onMounted, ref } from "vue";
+
+const user = JSON.parse(localStorage.getItem("user"));
+const userEducations = ref([]);
+
+const fetchData = async () => {
+  console.log('fetchData');
+  fetchUserEducations();
+};
+
+const fetchUserEducations = async () => {
+  try {
+    const res = await EducationService.getAll(user.id);
+    const { status, data } = res;
+    console.log(res);
+    if (status == 200) {
+      userEducations.value = data.map((c) => ({
+        ...c,
+        institutionName: c.institutionName,
+        enabled: false,
+      }));
+    }
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+onMounted(() => {
+  fetchData();
+});
+</script>
+
+<!-- <script>
     import EducationService from "@/services/education.service";
     import { onMounted, ref, watch } from "vue";
     import router from "../router";
@@ -90,4 +114,4 @@
 
 
     }
-</script>
+</script> -->

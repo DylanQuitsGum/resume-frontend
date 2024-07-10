@@ -3,6 +3,8 @@ import Home from "./components/Home.vue";
 import Login from "./components/Login.vue";
 import Register from "./components/Register.vue";
 
+const ResumeBuilder = () => import("./components/ResumeBuilder.vue");
+
 const AddEmployer = () => import("./components/AddEmployer.vue");
 const EditEmployer = () => import("./components/EditEmployer.vue");
 
@@ -236,6 +238,24 @@ const routes = [
     name: "editSkill",
     meta: { requiresAuth: true },
     component: EditSkill,
+    beforeEnter: (to, from, next) => {
+      const user = JSON.parse(localStorage.getItem("user"));
+      if(!user){
+        next(
+          {
+            name: "login"
+          }
+        );
+      }
+      next();
+    }
+  },
+  
+  {
+    path: "/resumeBuilder",
+    name: "resumeBuilder",
+    meta: { requiresAuth: true },
+    component: ResumeBuilder,
     beforeEnter: (to, from, next) => {
       const user = JSON.parse(localStorage.getItem("user"));
       if(!user){

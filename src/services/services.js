@@ -4,7 +4,7 @@ var baseurl = "";
 if (process.env.NODE_ENV == 'development') {
   baseurl = "http://localhost:3201/resumeapi/";
 } else {
-  baseurl = "http://3.142.71.232:3201/resumeapi/";
+  baseurl = "http://3.142.71.232/resumeapi/";
 }
 
 console.log(baseurl);

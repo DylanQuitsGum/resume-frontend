@@ -99,7 +99,11 @@
         </template>
 
         <template v-slot:item.6>
-          <v-card title="Build Resume" flat>...</v-card>
+          <v-card title="Build Resume" flat>
+            <v-card-actions>
+              <VBtn @click="buildResume">Build it</VBtn>
+            </v-card-actions>
+          </v-card>
         </template>
       </v-stepper>
     </v-container>
@@ -107,25 +111,42 @@
 </template>
 
 <script setup>
+import { onMounted, ref, watch } from "vue";
+
 import EducationService from "@/services/education.service";
 import EmploymentService from '@/services/employer.service';
 import SkillService from '@/services/skill.service';
 import AwardService from '@/services/award.service';
+import UserService from '@/services/user.service';
 
-import { onMounted, ref } from "vue";
+import { jsPDF} from 'jspdf';
 
 const user = JSON.parse(localStorage.getItem("user"));
+const userInformation = ref({
+  firstName: '',
+  lastName: '',
+  street: '',
+  city: '',
+  state: '',
+  zipCode: '',
+  email: ''
+});
 const userEducations = ref([]);
 const userEmployments = ref([]);
 const userSkills = ref([]);
 const userAwards = ref([]);
-const templateModel = ref();
+const templateModel = ref('');
+
+watch (templateModel, async (newValue, oldValue) => {
+  console.log(templateModel.value);
+});
 
 const fetchData = async () => {
   fetchUserEducations();
   fetchUserEmployment();
   fetchUserSkills();
   fetchUserAwards();
+  fetchUserInformation();
 };
 
 const fetchUserEducations = async () => {
@@ -194,6 +215,60 @@ const fetchUserAwards = async () => {
   } catch (err) {
     console.error(err);
   }
+};
+
+const fetchUserInformation = async () => {
+  try {
+    const res = await UserService.get(user.id);
+    const { status, data } = res;
+    if (status == 200) {
+      userInformation.value = {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        street: data.street,
+        city: data.city,
+        state: data.state,
+        zipCode: data.zipCode,
+        email: data.email,
+        phoneNumber: data.phoneNumber
+      }
+    }
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+const buildResume = async () => {
+  switch(templateModel.value){
+    case 0:
+      buildTemplate1();
+      break;
+    case 1:
+      buildTemplate2();
+      break;
+    case 2:
+      buildTemplate3();
+       break;
+    case 3:
+      buildTemplate4();
+      break;
+  }
+};
+
+const buildTemplate1 = async () => {
+
+};
+
+const buildTemplate2 = async () => {
+  
+};
+
+const buildTemplate3 = async () => {
+  console.log('build 3');
+};
+
+const buildTemplate4 = async () => {
+  console.log('build 4');
 };
 
 

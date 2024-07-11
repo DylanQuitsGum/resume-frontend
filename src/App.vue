@@ -9,38 +9,36 @@
             </router-link>
           </v-btn>
         </template>
-        <v-app-bar-title>{{ applicationTitle }}</v-app-bar-title>
+        <v-app-bar-title>{{ title }}</v-app-bar-title>
 
         <template v-slot:append>
-          <div v-if="!currentUser">
+          <div v-if="!user">
             <v-btn>
               <router-link to="/register" class="nav-link">
                 <font-awesome-icon icon="user-plus" /> Sign Up
               </router-link>
             </v-btn>
           </div>
-          <div v-if="currentUser">
+          <div v-if="user">
             <v-btn>
               <router-link to="/resumeBuilder" class="nav-link">
                 <font-awesome-icon icon="user" /> Build Resume
               </router-link>
             </v-btn>
           </div>
-          <div v-if="currentUser">
+          <div v-if="user">
             <v-btn>
               <router-link to="/profile" class="nav-link">
                 <font-awesome-icon icon="user" /> Profile
               </router-link>
             </v-btn>
           </div>
-          <div v-if="!currentUser">
-            <v-btn>
-              <router-link to="/login" class="nav-link">
-                <font-awesome-icon icon="sign-in-alt" /> Sign In
-              </router-link>
+          <div v-if="!user">
+            <v-btn v-on:click="signin">
+              <font-awesome-icon icon="sign-in-alt" /> Sign In 
             </v-btn>
           </div>
-          <div v-if="currentUser">
+          <div v-if="user">
             <v-btn v-on:click="signout">
               <font-awesome-icon icon="sign-out-alt" /> Sign Out
             </v-btn>
@@ -57,38 +55,37 @@
   </v-card>
 </template>
 
-<script>
+<script setup>
+import { onUnmounted, ref, onMounted, watch } from "vue";
 import authService from "./services/auth.service";
-import router from './router'
+import router from "./router";
 
-export default {
-  computed: {
-    currentUser() {
-      const user = this.$store.state.auth.user;
-      return user;
-    },
-    applicationTitle() {
-      const user = this.$store.state.auth.user;
-      if (user) {
-        return "Resume Application: " + user.email;
-      } else {
-        return "Resume Application";
-      }
-    },
-    showAdminBoard() {
-      if (this.currentUser && this.currentUser["roles"]) {
-        return this.currentUser["roles"].includes("ROLE_ADMIN");
-      }
+const user = ref();
+const title = ref("Resume Application");
 
-      return true;
-    },
-  },
-  methods: {
-    signout() {
-      authService.signout();
-      router.push({ name: "home" });
-      this.$forceUpdate();
-    },
-  },
+watch(user, async (newValue, oldValue) => {
+  console.log("watch user");
+  if (newValue) {
+    title.value = `Resume Application: ${user.value.email}`;
+  }
+});
+
+const signin = async () => {
+  console.log('before signin');
+  router.push({ path: "login" });
+  console.log('after signin');
 };
+
+const signout = async () => {
+  authService.signout();
+  router.push({ name: "home" });
+};
+
+onMounted(() => {
+  user.value = JSON.parse(localStorage.getItem("user"));
+});
+
+onUnmounted(() => {
+  localStorage.removeItem("user");
+});
 </script>

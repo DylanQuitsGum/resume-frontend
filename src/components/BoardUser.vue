@@ -1,5 +1,28 @@
 <template>
   <v-container>
+    <v-row no-gutters>
+      <v-col cols="12" sm="4">
+        <v-sheet class="ma-2 pa-2">
+          <v-btn @click="viewProfile">
+            <font-awesome-icon icon="user" /> Profile
+          </v-btn>
+        </v-sheet>
+      </v-col>
+      <v-col cols="12" sm="4">
+        <v-sheet class="ma-2 pa-2">
+          <v-btn @click="buildResume">
+            <font-awesome-icon icon="user" /> Build Resume
+          </v-btn>
+        </v-sheet>
+      </v-col>
+      <v-col cols="12" sm="4">
+        <v-sheet class="ma-2 pa-2">
+          <v-btn @click="viewResumes">
+            <font-awesome-icon icon="user" /> View Resumes
+          </v-btn>
+        </v-sheet>
+      </v-col>
+    </v-row>
     <v-expansion-panels multiple>
       <v-expansion-panel>
         <v-expansion-panel-title v-slot="{ expanded }">
@@ -288,7 +311,8 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from "vue";
+import { onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
 
 import EducationService from "@/services/education.service";
 import EmployerService from "@/services/employer.service";
@@ -297,7 +321,7 @@ import AwardService from "@/services/award.service";
 import ExperienceService from "@/services/experience.service";
 import LinkService from "@/services/link.service";
 
-import router from "../router";
+const router = useRouter();
 
 const user = JSON.parse(localStorage.getItem("user"));
 
@@ -315,7 +339,7 @@ const employerHeaders = ref([
     sortable: false,
     value: "employerName",
   },
-  { text: "City", value: "city", sortable: false },
+  { text: "Position", value: "position", sortable: false },
   { text: "Actions", value: "actions", sortable: false },
 ]);
 const educationHeaders = ref([
@@ -325,7 +349,7 @@ const educationHeaders = ref([
     sortable: false,
     value: "institutionName",
   },
-  { text: "City", value: "city", sortable: false },
+  { text: "Field", value: "fieldOfStudy", sortable: false },
   { text: "Actions", value: "actions", sortable: false },
 ]);
 const awardHeaders = ref([
@@ -633,6 +657,18 @@ const deleteLink = async (id) => {
     .catch((e) => {
       console.log(e);
     });
+};
+
+const viewProfile = async() => {
+  router.push({ path: '/profile' })
+};
+
+const buildResume = async() => {
+  router.push({ path: '/resumeBuilder' })
+};
+
+const viewResumes = async() => {
+  router.push({ path: '/resumes' })
 };
 
 onMounted(() => {

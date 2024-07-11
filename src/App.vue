@@ -1,6 +1,6 @@
 <template>
-  <v-card class="mx-auto" elevation="16">
-    <v-layout>
+  <v-app>
+        <v-layout>
       <v-app-bar color="primary" density="compact">
         <template v-slot:prepend>
           <v-btn>
@@ -52,7 +52,7 @@
         </div>
       </v-main>
     </v-layout>
-  </v-card>
+  </v-app>
 </template>
 
 <script setup>

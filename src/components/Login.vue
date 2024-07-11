@@ -1,45 +1,45 @@
 <template>
-    <v-container class="container d-flex align-center justify-center" fluid>
-      <v-form @submit.prevent="signin">
-        <v-card class="card rounded-md elevation-1">
-          <v-card-title class="headline mb-2">Login </v-card-title>
-          <v-card-text>
-            <v-text-field
-              v-model="user.email"
-              label="Email"
-              variant="outlined"
-              required
-            ></v-text-field>
-  
-            <v-text-field
-              v-model="user.password"
-              label="Password"
-              variant="outlined"
-              required
-              type="password"
-            ></v-text-field>
-          </v-card-text>
-          <v-card-text class="error">
-            {{ errorMessage }}
-          </v-card-text>
-          <v-card-actions>
-            <v-btn
-              class="login-btn rounded-xl"
-              variant="flat"
-              color="primary"
-              @click="signin"
-              >Login</v-btn
-            >
-          </v-card-actions>
-        </v-card>
-      </v-form>
-    </v-container>
-  </template>
+  <v-container class="container d-flex align-center justify-center" fluid>
+    <v-form @submit.prevent="signin">
+      <v-card class="card rounded-md elevation-1">
+        <v-card-title class="headline mb-2">Login </v-card-title>
+        <v-card-text>
+          <v-text-field
+            v-model="user.email"
+            label="Email"
+            variant="outlined"
+            required
+          ></v-text-field>
+
+          <v-text-field
+            v-model="user.password"
+            label="Password"
+            variant="outlined"
+            required
+            type="password"
+          ></v-text-field>
+        </v-card-text>
+        <v-card-text class="error">
+          {{ errorMessage }}
+        </v-card-text>
+        <v-card-actions>
+          <v-btn
+            class="login-btn rounded-xl"
+            variant="flat"
+            color="primary"
+            @click="signin"
+            >Login</v-btn
+          >
+        </v-card-actions>
+      </v-card>
+    </v-form>
+  </v-container>
+</template>
 
 <script setup>
-import { ref } from 'vue';
-import authService from '@/services/auth.service';
-import router from '../router'
+import { ref } from "vue";
+import authService from "@/services/auth.service";
+import router from "../router";
 
 const errorMessage = ref("");
 
@@ -51,23 +51,22 @@ const user = ref({
   city: "Oklahoma City",
   state: "OK",
   zipCode: "73170",
-  password: "P#ssw0rd"
+  password: "P#ssw0rd",
 });
 
-async function signin(){
-  try{
+async function signin() {
+  try {
     const data = await authService.signin(user.value);
     errorMessage.value = "";
 
-    router.push({name: "home"});
-  }catch(err){
+    router.push({ name: "home" });
+  } catch (err) {
     console.log(err);
     const { data } = err.response;
 
     errorMessage.value = data.message;
   }
 }
-
 </script>
 
 <style scoped>
@@ -76,7 +75,7 @@ label {
   margin-top: 10px;
 }
 
-.v-card-text{
+.v-card-text {
   width: 350px;
 }
 

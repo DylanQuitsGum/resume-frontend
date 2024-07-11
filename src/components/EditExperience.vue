@@ -28,7 +28,7 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { useRoute } from 'vue-router';
+import { useRoute } from "vue-router";
 import ExperienceService from "@/services/experience.service";
 import router from "../router";
 

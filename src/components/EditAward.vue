@@ -36,7 +36,7 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { useRoute } from 'vue-router';
+import { useRoute } from "vue-router";
 import AwardService from "@/services/award.service";
 import router from "../router";
 
@@ -57,11 +57,7 @@ const fetchUserAward = async () => {
 };
 
 const updateAward = async () => {
-  AwardService.update(
-    user.id,
-    currentAward.value.id,
-    currentAward.value
-  )
+  AwardService.update(user.id, currentAward.value.id, currentAward.value)
     .then((response) => {
       message.value = "The award was updated successfully!";
       router.push({ path: "/user" });

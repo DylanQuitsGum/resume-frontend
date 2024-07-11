@@ -258,7 +258,7 @@
             <v-col cols="12" sm="12">
               <v-card class="mx-auto" tile>
                 <v-data-table
-                  :headers="LinkHeaders"
+                  :headers="linkHeaders"
                   :items="userLinks"
                   disable-pagination
                   :hide-default-footer="true"
@@ -267,10 +267,7 @@
                     <v-icon small class="mr-2" @click="editLink(item.id)"
                       >mdi-pencil</v-icon
                     >
-                    <v-icon
-                      small
-                      class="mr-2"
-                      @click="deleteLink(item.id)"
+                    <v-icon small class="mr-2" @click="deleteLink(item.id)"
                       >mdi-delete</v-icon
                     >
                   </template>
@@ -400,29 +397,28 @@ const addEducation = async () => {
   router.push({ path: "addEducation" });
 };
 const removeAllEducations = async () => {
-      const user = JSON.parse(localStorage.getItem("user"));
-      EducationService.deleteAll(user.id)
-        .then((response) => {
-          this.fetchUserEducations();
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+  const user = JSON.parse(localStorage.getItem("user"));
+  EducationService.deleteAll(user.id)
+    .then((response) => {
+      this.fetchUserEducations();
+    })
+    .catch((e) => {
+      console.log(e);
+    });
 };
 const editEducation = async (id) => {
   router.push({ path: `editEducation/${id}` });
 };
 const deleteEducation = async (id) => {
-      const user = JSON.parse(localStorage.getItem("user"));
-      EducationService.delete(user.id, id)
-        .then(() => {
-          this.fetchUserEducations();
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+  const user = JSON.parse(localStorage.getItem("user"));
+  EducationService.delete(user.id, id)
+    .then(() => {
+      fetchUserEducations();
+    })
+    .catch((e) => {
+      console.log(e);
+    });
 };
-
 
 const fetchUserEmployers = async () => {
   try {
@@ -444,27 +440,27 @@ const addEmployer = async () => {
   router.push({ path: "addEmployer" });
 };
 const removeAllEmployers = async () => {
-      const user = JSON.parse(localStorage.getItem("user"));
-      EmployerService.deleteAll(user.id)
-        .then((response) => {
-          this.fetchUserEmployers();
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+  const user = JSON.parse(localStorage.getItem("user"));
+  EmployerService.deleteAll(user.id)
+    .then((response) => {
+      this.fetchUserEmployers();
+    })
+    .catch((e) => {
+      console.log(e);
+    });
 };
 const editEmployer = async (id) => {
   router.push({ path: `editEmployer/${id}` });
 };
 const deleteEmployer = async (id) => {
-      const user = JSON.parse(localStorage.getItem("user"));
-      EmployerService.delete(user.id, id)
-        .then(() => {
-          this.fetchUserEmployers();
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+  const user = JSON.parse(localStorage.getItem("user"));
+  EmployerService.delete(user.id, id)
+    .then(() => {
+      fetchUserEmployers();
+    })
+    .catch((e) => {
+      console.log(e);
+    });
 };
 
 const fetchUserSkills = async () => {
@@ -487,27 +483,27 @@ const addSkill = async () => {
   router.push({ path: "addSkill" });
 };
 const removeAllSkills = async () => {
-      const user = JSON.parse(localStorage.getItem("user"));
-      SkillService.deleteAll(user.id)
-        .then((response) => {
-          this.fetchUserSkills();
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+  const user = JSON.parse(localStorage.getItem("user"));
+  SkillService.deleteAll(user.id)
+    .then((response) => {
+      this.fetchUserSkills();
+    })
+    .catch((e) => {
+      console.log(e);
+    });
 };
 const editSkill = async (id) => {
   router.push({ path: `editSkill/${id}` });
 };
 const deleteSkill = async (id) => {
-      const user = JSON.parse(localStorage.getItem("user"));
-      SkillService.delete(user.id, id)
-        .then(() => {
-          this.fetchUserSkills();
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+  const user = JSON.parse(localStorage.getItem("user"));
+  SkillService.delete(user.id, id)
+    .then(() => {
+      fetchUserSkills();
+    })
+    .catch((e) => {
+      console.log(e);
+    });
 };
 
 const fetchUserAwards = async () => {
@@ -530,27 +526,27 @@ const addAward = async () => {
   router.push({ path: "addAward" });
 };
 const removeAllAwards = async () => {
-      const user = JSON.parse(localStorage.getItem("user"));
-      AwardService.deleteAll(user.id)
-        .then((response) => {
-          this.fetchUserAwards();
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+  const user = JSON.parse(localStorage.getItem("user"));
+  AwardService.deleteAll(user.id)
+    .then((response) => {
+      this.fetchUserAwards();
+    })
+    .catch((e) => {
+      console.log(e);
+    });
 };
 const editAward = async (id) => {
   router.push({ path: `editAward/${id}` });
 };
 const deleteAward = async (id) => {
-      const user = JSON.parse(localStorage.getItem("user"));
-      AwardService.delete(user.id, id)
-        .then(() => {
-          this.fetchUserAwards();
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+  const user = JSON.parse(localStorage.getItem("user"));
+  AwardService.delete(user.id, id)
+    .then(() => {
+      fetchUserAwards();
+    })
+    .catch((e) => {
+      console.log(e);
+    });
 };
 
 const fetchUserExperiences = async () => {
@@ -573,27 +569,27 @@ const addExperience = async () => {
   router.push({ path: "addExperience" });
 };
 const removeAllExperiences = async () => {
-      const user = JSON.parse(localStorage.getItem("user"));
-      ExperienceService.deleteAll(user.id)
-        .then((response) => {
-          this.fetchUserExperiences();
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+  const user = JSON.parse(localStorage.getItem("user"));
+  ExperienceService.deleteAll(user.id)
+    .then((response) => {
+      this.fetchUserExperiences();
+    })
+    .catch((e) => {
+      console.log(e);
+    });
 };
 const editExperience = async (id) => {
   router.push({ path: `editExperience/${id}` });
 };
 const deleteExperience = async (id) => {
-      const user = JSON.parse(localStorage.getItem("user"));
-      ExperienceService.delete(user.id, id)
-        .then(() => {
-          this.fetchUserExperiences();
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+  const user = JSON.parse(localStorage.getItem("user"));
+  ExperienceService.delete(user.id, id)
+    .then(() => {
+      fetchUserExperiences();
+    })
+    .catch((e) => {
+      console.log(e);
+    });
 };
 
 const fetchUserLinks = async () => {
@@ -616,27 +612,27 @@ const addLink = async () => {
   router.push({ path: "addLink" });
 };
 const removeAllLinks = async () => {
-      const user = JSON.parse(localStorage.getItem("user"));
-      LinkService.deleteAll(user.id)
-        .then((response) => {
-          this.fetchUserLinks();
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+  const user = JSON.parse(localStorage.getItem("user"));
+  LinkService.deleteAll(user.id)
+    .then((response) => {
+      this.fetchUserLinks();
+    })
+    .catch((e) => {
+      console.log(e);
+    });
 };
 const editLink = async (id) => {
   router.push({ path: `editLink/${id}` });
 };
 const deleteLink = async (id) => {
-      const user = JSON.parse(localStorage.getItem("user"));
-      LinkService.delete(user.id, id)
-        .then(() => {
-          this.fetchUserLinks();
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+  const user = JSON.parse(localStorage.getItem("user"));
+  LinkService.delete(user.id, id)
+    .then(() => {
+      fetchUserLinks();
+    })
+    .catch((e) => {
+      console.log(e);
+    });
 };
 
 onMounted(() => {
@@ -644,264 +640,8 @@ onMounted(() => {
 });
 </script>
 
-<!-- <script>
-import EmployerServices from "../services/employer.service";
-import EducationServices from "../services/education.service";
-import AwardServices from "../services/award.service";
-import SkillServices from "../services/skill.service";
-
-import router from "../router";
-
-export default {
-  data() {
-    return {
-      employers: [],
-      educations: [],
-      awards: [],
-      skills: [],
-      title: "",
-      employerHeaders: [
-        {
-          text: "Employer",
-          align: "start",
-          sortable: false,
-          value: "employerName",
-        },
-        { text: "City", value: "city", sortable: false },
-        { text: "Actions", value: "actions", sortable: false },
-      ],
-      educationHeaders: [
-        {
-          text: "Institution",
-          align: "start",
-          sortable: false,
-          value: "institutionName",
-        },
-        { text: "City", value: "city", sortable: false },
-        { text: "Actions", value: "actions", sortable: false },
-      ],
-      awardHeaders: [
-        {
-          text: "Name",
-          align: "start",
-          sortable: false,
-          value: "awardName",
-        },
-        { text: "Award Date", value: "dateAwarded", sortable: false },
-        { text: "Actions", value: "actions", sortable: false },
-      ],
-      skillHeaders: [
-        {
-          text: "Name",
-          align: "start",
-          sortable: false,
-          value: "skillName",
-        },
-        { text: "Skill Level", value: "skillLevel", sortable: false },
-        { text: "Actions", value: "actions", sortable: false },
-      ],
-    };
-  },
-  async mounted() {
-    this.retrieveEmployers();
-    this.retrieveEducations();
-    this.retrieveAwards();
-    this.retrieveSkills();
-  },
-  methods: {
-    refreshEmployers() {
-      this.retrieveEmployers();
-    },
-    addEmployer() {
-      router.push({ path: "addEmployer" });
-    },
-    retrieveEmployers() {
-      const user = JSON.parse(localStorage.getItem("user"));
-      EmployerServices.getAll(user.id)
-        .then((response) => {
-          this.employers = response.data.map(this.getDisplayEmployer);
-        })
-        .catch((e) => {});
-    },
-    removeAllEmployers() {
-      const user = JSON.parse(localStorage.getItem("user"));
-      EmployerServices.deleteAll(user.id)
-        .then((response) => {
-          this.refreshEmployers();
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
-
-    editEmployer(id) {
-      router.push({ path: `editEmployer/${id}` });
-    },
-
-    deleteEmployer(id) {
-      const user = JSON.parse(localStorage.getItem("user"));
-      EmployerServices.delete(user.id, id)
-        .then(() => {
-          this.refreshEmployers();
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
-    getDisplayEmployer(employer) {
-      return {
-        id: employer.id,
-        employerName: employer.employerName,
-        city: employer.city,
-      };
-    },
-
-    refreshEducations() {
-      this.retrieveEducations();
-    },
-    addEducation() {
-      router.push({ path: "addEducation" });
-    },
-    retrieveEducations() {
-      const user = JSON.parse(localStorage.getItem("user"));
-      EducationServices.getAll(user.id)
-        .then((response) => {
-          this.educations = response.data.map(this.getDisplayEducation);
-        })
-        .catch((e) => {});
-    },
-    removeAllEducations() {
-      const user = JSON.parse(localStorage.getItem("user"));
-      EducationServices.deleteAll(user.id)
-        .then((response) => {
-          this.refreshEducations();
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
-
-    editEducation(id) {
-      router.push({ path: `editEducation/${id}` });
-    },
-
-    deleteEducation(id) {
-      const user = JSON.parse(localStorage.getItem("user"));
-      EducationServices.delete(user.id, id)
-        .then(() => {
-          this.refreshEducations();
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
-    getDisplayEducation(education) {
-      return {
-        id: education.id,
-        institutionName: education.institutionName,
-        city: education.city,
-      };
-    },
-
-    refreshAwards() {
-      this.retrieveAwards();
-    },
-    addAward() {
-      router.push({ path: "addAward" });
-    },
-    retrieveAwards() {
-      const user = JSON.parse(localStorage.getItem("user"));
-      AwardServices.getAll(user.id)
-        .then((response) => {
-          this.awards = response.data.map(this.getDisplayAward);
-        })
-        .catch((e) => {});
-    },
-    removeAllAwards() {
-      const user = JSON.parse(localStorage.getItem("user"));
-      AwardServices.deleteAll(user.id)
-        .then((response) => {
-          this.refreshAwards();
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
-
-    editAward(id) {
-      router.push({ path: `editAward/${id}` });
-    },
-
-    deleteAward(id) {
-      const user = JSON.parse(localStorage.getItem("user"));
-      AwardServices.delete(user.id, id)
-        .then(() => {
-          this.refreshAwards();
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
-    getDisplayAward(award) {
-      return {
-        id: award.id,
-        awardName: award.awardName,
-        dateAwarded: award.dateAwarded,
-      };
-    },
-
-    refreshSkills() {
-      this.retrieveSkills();
-    },
-    addSkill() {
-      router.push({ path: "addSkill" });
-    },
-    retrieveSkills() {
-      const user = JSON.parse(localStorage.getItem("user"));
-      SkillServices.getAll(user.id)
-        .then((response) => {
-          this.skills = response.data.map(this.getDisplaySkill);
-        })
-        .catch((e) => {});
-    },
-    removeAllSkills() {
-      const user = JSON.parse(localStorage.getItem("user"));
-      SkillServices.deleteAll(user.id)
-        .then((response) => {
-          this.refreshSkills();
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
-
-    editSkill(id) {
-      router.push({ path: `editSkill/${id}` });
-    },
-
-    deleteSkill(id) {
-      const user = JSON.parse(localStorage.getItem("user"));
-      SkillServices.delete(user.id, id)
-        .then(() => {
-          this.refreshSkills();
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
-    getDisplaySkill(skill) {
-      return {
-        id: skill.id,
-        skillName: skill.skillName,
-        skillLevel: skill.skillLevel,
-      };
-    },
-  },
-};
-</script>
-
 <style scoped>
 v-container {
   height: 100vh;
 }
-</style> -->
+</style>

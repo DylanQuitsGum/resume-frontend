@@ -1,27 +1,27 @@
 <template>
-  <div v-if="currentSkill" class="edit-form py-3">
-    <p class="headline">Edit Skill</p>
+  <div v-if="currentLink" class="edit-form py-3">
+    <p class="headline">Edit Link</p>
 
     <v-form ref="form" lazy-validation>
       <v-text-field
         variant="outlined"
-        v-model="currentSkill.skillName"
-        :rules="[(v) => !!v || 'Skill name is required']"
-        label="Skill Name"
+        v-model="currentLink.linkType"
+        :rules="[(v) => !!v || 'Link type is required']"
+        label="Link Type"
         required
       ></v-text-field>
 
       <v-text-field
         variant="outlined"
-        v-model="currentSkill.skillLevel"
-        :rules="[(v) => !!v || 'Skill level is required']"
-        label="Skill Level"
+        v-model="currentLink.linkURL"
+        :rules="[(v) => !!v || 'Link URL is required']"
+        label="Link URL"
         required
       ></v-text-field>
 
       <v-divider class="my-5"></v-divider>
       <div class="d-flex flex-wrap ga-3">
-        <v-btn color="success" small @click="updateSkill"> Update </v-btn>
+        <v-btn color="success" small @click="updateLink"> Update </v-btn>
         <v-btn color="success" small @click="cancelEdit"> Cancel </v-btn>
       </div>
     </v-form>
@@ -30,36 +30,36 @@
   </div>
 
   <div v-else>
-    <p>Please click on a Skill...</p>
+    <p>Please click on a link...</p>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
-import SkillService from "@/services/skill.service";
+import LinkService from "@/services/link.service";
 import router from "../router";
 
 const route = useRoute();
 const user = JSON.parse(localStorage.getItem("user"));
-const currentSkill = ref();
+const currentLink = ref();
 const message = ref("");
 
-const fetchUserSkill = async () => {
-  var skillId = route.params.id;
-  SkillService.get(user.id, skillId)
+const fetchUserLink = async () => {
+  var linkId = route.params.id;
+  LinkService.get(user.id, linkId)
     .then((response) => {
-      currentSkill.value = response.data;
+      currentLink.value = response.data;
     })
     .catch((e) => {
       console.log(e);
     });
 };
 
-const updateSkill = async () => {
-  SkillService.update(user.id, currentSkill.value.id, currentSkill.value)
+const updateLink = async () => {
+  LinkService.update(user.id, currentLink.value.id, currentLink.value)
     .then((response) => {
-      message.value = "The skill was updated successfully!";
+      message.value = "The link was updated successfully!";
       router.push({ path: "/user" });
     })
     .catch((e) => {
@@ -72,7 +72,7 @@ const cancelEdit = async () => {
 };
 
 onMounted(() => {
-  fetchUserSkill();
+  fetchUserLink();
 });
 </script>
 

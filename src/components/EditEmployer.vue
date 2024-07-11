@@ -3,31 +3,76 @@
     <p class="headline">Edit Employer</p>
 
     <v-form ref="form" lazy-validation>
-      <v-text-field variant="outlined" v-model="currentEmployer.employerName"
-        :rules="[(v) => !!v || 'Employer name is required']" label="Employer Name" required></v-text-field>
+      <v-text-field
+        variant="outlined"
+        v-model="currentEmployer.employerName"
+        :rules="[(v) => !!v || 'Employer name is required']"
+        label="Employer Name"
+        required
+      ></v-text-field>
 
-      <v-text-field variant="outlined" v-model="currentEmployer.position"
-        :rules="[(v) => !!v || 'Position is required']" label="Position" required></v-text-field>
+      <v-text-field
+        variant="outlined"
+        v-model="currentEmployer.position"
+        :rules="[(v) => !!v || 'Position is required']"
+        label="Position"
+        required
+      ></v-text-field>
 
-      <v-text-field variant="outlined" v-model="currentEmployer.street" :rules="[(v) => !!v || 'Street is required']"
-        label="Street" required></v-text-field>
+      <v-text-field
+        variant="outlined"
+        v-model="currentEmployer.street"
+        :rules="[(v) => !!v || 'Street is required']"
+        label="Street"
+        required
+      ></v-text-field>
 
-      <v-text-field variant="outlined" v-model="currentEmployer.city" :rules="[(v) => !!v || 'City is required']"
-        label="City" required></v-text-field>
+      <v-text-field
+        variant="outlined"
+        v-model="currentEmployer.city"
+        :rules="[(v) => !!v || 'City is required']"
+        label="City"
+        required
+      ></v-text-field>
 
-      <v-text-field variant="outlined" v-model="currentEmployer.state" :rules="[(v) => !!v || 'State is required']"
-        label="State" required></v-text-field>
+      <v-text-field
+        variant="outlined"
+        v-model="currentEmployer.state"
+        :rules="[(v) => !!v || 'State is required']"
+        label="State"
+        required
+      ></v-text-field>
 
-      <v-text-field variant="outlined" v-model="currentEmployer.zipCode" :rules="[(v) => !!v || 'Zip is required']"
-        label="Zip" required></v-text-field>
+      <v-text-field
+        variant="outlined"
+        v-model="currentEmployer.zipCode"
+        :rules="[(v) => !!v || 'Zip is required']"
+        label="Zip"
+        required
+      ></v-text-field>
 
-      <v-text-field variant="outlined" v-model="currentEmployer.beginDate"
-        :rules="[(v) => !!v || 'Begin Date is required']" label="Begin Date" required></v-text-field>
+      <v-text-field
+        variant="outlined"
+        v-model="currentEmployer.beginDate"
+        :rules="[(v) => !!v || 'Begin Date is required']"
+        label="Begin Date"
+        required
+      ></v-text-field>
 
-      <v-text-field variant="outlined" v-model="currentEmployer.endDate" label="End Date" required></v-text-field>
+      <v-text-field
+        variant="outlined"
+        v-model="currentEmployer.endDate"
+        label="End Date"
+        required
+      ></v-text-field>
 
-      <v-text-field variant="outlined" v-model="currentEmployer.salary" :rules="[(v) => !!v || 'Salary is required']"
-        label="Salary" required></v-text-field>
+      <v-text-field
+        variant="outlined"
+        v-model="currentEmployer.salary"
+        :rules="[(v) => !!v || 'Salary is required']"
+        label="Salary"
+        required
+      ></v-text-field>
 
       <v-divider class="my-5"></v-divider>
       <div class="d-flex flex-wrap ga-3">
@@ -46,7 +91,7 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { useRoute } from 'vue-router';
+import { useRoute } from "vue-router";
 import EmployerService from "@/services/employer.service";
 import router from "../router";
 

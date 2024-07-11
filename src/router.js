@@ -17,6 +17,9 @@ const EditAward = () => import("./components/EditAward.vue");
 const AddSkill = () => import("./components/AddSkill.vue");
 const EditSkill = () => import("./components/EditSkill.vue");
 
+const AddLink = () => import("./components/AddLink.vue");
+const EditLink = () => import("./components/EditLink.vue");
+
 const AddExperience = () => import("./components/AddExperience.vue");
 const EditExperience = () => import("./components/EditExperience.vue");
 
@@ -241,6 +244,40 @@ const routes = [
     name: "editSkill",
     meta: { requiresAuth: true },
     component: EditSkill,
+    beforeEnter: (to, from, next) => {
+      const user = JSON.parse(localStorage.getItem("user"));
+      if(!user){
+        next(
+          {
+            name: "login"
+          }
+        );
+      }
+      next();
+    }
+  },
+  {
+    path: "/addLink",
+    name: "addLink",
+    meta: { requiresAuth: true },
+    component: AddLink,
+    beforeEnter: (to, from, next) => {
+      const user = JSON.parse(localStorage.getItem("user"));
+      if(!user){
+        next(
+          {
+            name: "login"
+          }
+        );
+      }
+      next();
+    }
+  },
+  {
+    path: "/editLink/:id",
+    name: "editLink",
+    meta: { requiresAuth: true },
+    component: EditLink,
     beforeEnter: (to, from, next) => {
       const user = JSON.parse(localStorage.getItem("user"));
       if(!user){

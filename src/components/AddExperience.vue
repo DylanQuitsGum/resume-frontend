@@ -52,21 +52,21 @@ const saveExperience = async () => {
     userId: user.value.id,
   };
   ExperienceService.create(user.value.id, data)
-          .then((response) => {
-            experience.value.id = response.data.id;
-            submitted.value = true;
-          })
-          .catch((e) => {
-            console.log(e);
-          });
+    .then((response) => {
+      experience.value.id = response.data.id;
+      submitted.value = true;
+    })
+    .catch((e) => {
+      console.log(e);
+    });
 };
 
-const newExperience = async() => {
+const newExperience = async () => {
   submitted.value = false;
   experience.value = {};
 };
 
-const listExperiences = async() => {
+const listExperiences = async () => {
   router.push({ path: "/user" });
 };
 

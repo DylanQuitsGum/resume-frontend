@@ -28,9 +28,7 @@
       <v-card class="mx-auto">
         <v-card-title> Submitted successfully! </v-card-title>
 
-        <v-card-subtitle>
-          Click the button to add new skill.
-        </v-card-subtitle>
+        <v-card-subtitle> Click the button to add new skill. </v-card-subtitle>
 
         <v-card-actions>
           <v-btn color="success" @click="newSkill">Add</v-btn>
@@ -52,7 +50,7 @@ const submitted = ref(false);
 const skill = ref({
   skillId: null,
   skillName: "Skill Name",
-  skillLevel: 5
+  skillLevel: 5,
 });
 
 const saveSkill = async () => {
@@ -62,21 +60,21 @@ const saveSkill = async () => {
     userId: user.value.id,
   };
   SkillService.create(user.value.id, data)
-          .then((response) => {
-            skill.value.id = response.data.id;
-            submitted.value = true;
-          })
-          .catch((e) => {
-            console.log(e);
-          });
+    .then((response) => {
+      skill.value.id = response.data.id;
+      submitted.value = true;
+    })
+    .catch((e) => {
+      console.log(e);
+    });
 };
 
-const newSkill = async() => {
+const newSkill = async () => {
   submitted.value = false;
   skill.value = {};
 };
 
-const listSkills = async() => {
+const listSkills = async () => {
   router.push({ path: "/user" });
 };
 

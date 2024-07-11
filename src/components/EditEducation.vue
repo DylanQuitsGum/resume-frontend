@@ -83,7 +83,7 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { useRoute } from 'vue-router';
+import { useRoute } from "vue-router";
 import EducationService from "@/services/education.service";
 import router from "../router";
 

@@ -89,3 +89,13 @@ onUnmounted(() => {
   localStorage.removeItem("user");
 });
 </script>
+
+<style scoped>
+v-main{
+  height: 100vh;
+}
+
+router-view{
+  height: 100vh;
+}
+</style>

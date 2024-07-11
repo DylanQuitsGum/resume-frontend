@@ -88,63 +88,58 @@
   </div>
 </template>
 
-<script>
-import EducationServices from "../services/education.service";
-import router from '../router';
+<script setup>
+import { ref, onMounted } from "vue";
+import EducationService from "@/services/education.service";
+import router from "../router";
 
-export default {
-  name: "add-education",
-  data() {
-    return {
-      education: {
-        id: null,
-        institutionName: "UCO",
-        street: "123 I Can Dr.",
-        city: "Edmond",
-        state: "OK",
-        zipCode: "90210",
-        beginDate: "2001-01-01",
-        degreeAwardDate: "2004-12-13",
-        fieldOfStudy: "CS",
-        userId: 1,
-      },
-      submitted: false,
-    };
-  },
-  methods: {
-    saveEducation() {
-      const user = JSON.parse(localStorage.getItem("user"));
-      console.log(`UserId: ${user.id}`);
-      var data = {
-        institutionName: this.education.institutionName,
-        street: this.education.street,
-        city: this.education.city,
-        state: this.education.state,
-        zipCode: this.education.zipCode,
-        beginDate: this.education.beginDate,
-        degreeAwardDate: this.education.degreeAwardDate,
-        fieldOfStudy: this.education.fieldOfStudy,
-        userId: user.id,
-      };
+const user = ref(JSON.parse(localStorage.getItem("user")));
+const submitted = ref(false);
 
-      EducationServices.create(user.id, data)
-        .then((response) => {
-          this.education.id = response.data.id;
-          this.submitted = true;
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
-    newEducation() {
-      this.submitted = false;
-      this.education = {};
-    },
-    listEducations() {
-      router.push({ path: "/user" });
-    },
-  },
+const education = ref({
+  educationId: null,
+  institutionName: "UCO",
+  street: "123 I Can Dr.",
+  city: "Edmond",
+  state: "OK",
+  zipCode: "90210",
+  beginDate: "2001-01-01",
+  degreeAwardDate: "2004-12-13",
+  fieldOfStudy: "CS",
+});
+
+const saveEducation = async () => {
+  var data = {
+    institutionName: education.value.institutionName,
+    street: education.value.street,
+    city: education.value.city,
+    state: education.value.state,
+    zipCode: education.value.zipCode,
+    beginDate: education.value.beginDate,
+    degreeAwardDate: education.value.degreeAwardDate,
+    fieldOfStudy: education.value.fieldOfStudy,
+    userId: user.value.id,
+  };
+  EducationService.create(user.value.id, data)
+    .then((response) => {
+      education.value.id = response.data.id;
+      submitted.value = true;
+    })
+    .catch((e) => {
+      console.log(e);
+    });
 };
+
+const newEducation = async () => {
+  submitted.value = false;
+  education.value = {};
+};
+
+const listEducations = async () => {
+  router.push({ path: "/user" });
+};
+
+onMounted(() => {});
 </script>
 
 <style>
@@ -152,4 +147,3 @@ export default {
   max-width: 300px;
 }
 </style>
-

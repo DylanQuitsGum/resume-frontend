@@ -105,18 +105,22 @@ const router = useRouter();
 const errorMessage = ref("");
 
 const emailRules = [
-v => !!v || 'E-mail is required',
-v => /^(([^<>()[\]\\.,;:\s@']+(\.[^<>()\\[\]\\.,;:\s@']+)*)|('.+'))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(v) || 'E-mail must be valid',
+  (v) => !!v || "E-mail is required",
+  (v) =>
+    /^(([^<>()[\]\\.,;:\s@']+(\.[^<>()\\[\]\\.,;:\s@']+)*)|('.+'))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
+      v
+    ) || "E-mail must be valid",
 ];
 
 const zipCodeRules = [
-v => !!v || 'ZipCode is required',
-v => /(^\d{5}$)|(^\d{5}-\d{4}$)/.test(v) || 'Zip Code must be valid',
+  (v) => !!v || "ZipCode is required",
+  (v) => /(^\d{5}$)|(^\d{5}-\d{4}$)/.test(v) || "Zip Code must be valid",
 ];
 
 const phoneRules = [
-  v => !!v || 'Phone is required',
-  v => /^(1[ -]?)?\d{3}[ -]?\d{3}[ -]?\d{4}$/.test(v) || 'Phone must be valid',
+  (v) => !!v || "Phone is required",
+  (v) =>
+    /^(1[ -]?)?\d{3}[ -]?\d{3}[ -]?\d{4}$/.test(v) || "Phone must be valid",
 ];
 
 const user = ref({

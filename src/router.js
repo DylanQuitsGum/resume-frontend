@@ -17,6 +17,12 @@ const EditAward = () => import("./components/EditAward.vue");
 const AddSkill = () => import("./components/AddSkill.vue");
 const EditSkill = () => import("./components/EditSkill.vue");
 
+const AddLink = () => import("./components/AddLink.vue");
+const EditLink = () => import("./components/EditLink.vue");
+
+const AddExperience = () => import("./components/AddExperience.vue");
+const EditExperience = () => import("./components/EditExperience.vue");
+
 const Profile = () => import("./components/Profile.vue");
 const BoardAdmin = () => import("./components/BoardAdmin.vue");
 const BoardUser = () => import("./components/BoardUser.vue");
@@ -115,7 +121,7 @@ const routes = [
   },
   {
     path: "/addEmployer",
-    name: "addemployer",
+    name: "addEmployer",
     meta: { requiresAuth: true },
     component: AddEmployer,
     beforeEnter: (to, from, next) => {
@@ -150,7 +156,7 @@ const routes = [
 
   {
     path: "/addEducation",
-    name: "addeducation",
+    name: "addEducation",
     meta: { requiresAuth: true },
     component: AddEducation,
     beforeEnter: (to, from, next) => {
@@ -184,7 +190,7 @@ const routes = [
   },
   {
     path: "/addAward",
-    name: "addaward",
+    name: "addAward",
     meta: { requiresAuth: true },
     component: AddAward,
     beforeEnter: (to, from, next) => {
@@ -218,7 +224,7 @@ const routes = [
   },
   {
     path: "/addSkill",
-    name: "addskill",
+    name: "addSkill",
     meta: { requiresAuth: true },
     component: AddSkill,
     beforeEnter: (to, from, next) => {
@@ -250,7 +256,75 @@ const routes = [
       next();
     }
   },
-  
+  {
+    path: "/addLink",
+    name: "addLink",
+    meta: { requiresAuth: true },
+    component: AddLink,
+    beforeEnter: (to, from, next) => {
+      const user = JSON.parse(localStorage.getItem("user"));
+      if(!user){
+        next(
+          {
+            name: "login"
+          }
+        );
+      }
+      next();
+    }
+  },
+  {
+    path: "/editLink/:id",
+    name: "editLink",
+    meta: { requiresAuth: true },
+    component: EditLink,
+    beforeEnter: (to, from, next) => {
+      const user = JSON.parse(localStorage.getItem("user"));
+      if(!user){
+        next(
+          {
+            name: "login"
+          }
+        );
+      }
+      next();
+    }
+  },
+  {
+    path: "/addExperience",
+    name: "addExperience",
+    meta: { requiresAuth: true },
+    component: AddExperience,
+    beforeEnter: (to, from, next) => {
+      const user = JSON.parse(localStorage.getItem("user"));
+      if(!user){
+        next(
+          {
+            name: "login"
+          }
+        );
+      }
+      next();
+    }
+  },
+  {
+    path: "/editExperience/:id",
+    name: "editExperience",
+    meta: { requiresAuth: true },
+    component: EditExperience,
+    beforeEnter: (to, from, next) => {
+      const user = JSON.parse(localStorage.getItem("user"));
+      if(!user){
+        next(
+          {
+            name: "login"
+          }
+        );
+      }
+      next();
+    }
+  },
+
   {
     path: "/resumeBuilder",
     name: "resumeBuilder",

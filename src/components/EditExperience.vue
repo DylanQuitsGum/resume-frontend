@@ -1,27 +1,19 @@
 <template>
-  <div v-if="currentSkill" class="edit-form py-3">
-    <p class="headline">Edit Skill</p>
+  <div v-if="currentExperience" class="edit-form py-3">
+    <p class="headline">Edit Experience</p>
 
     <v-form ref="form" lazy-validation>
       <v-text-field
         variant="outlined"
-        v-model="currentSkill.skillName"
-        :rules="[(v) => !!v || 'Skill name is required']"
-        label="Skill Name"
-        required
-      ></v-text-field>
-
-      <v-text-field
-        variant="outlined"
-        v-model="currentSkill.skillLevel"
-        :rules="[(v) => !!v || 'Skill level is required']"
-        label="Skill Level"
+        v-model="currentExperience.experienceText"
+        :rules="[(v) => !!v || 'Experience text is required']"
+        label="Experience Text"
         required
       ></v-text-field>
 
       <v-divider class="my-5"></v-divider>
       <div class="d-flex flex-wrap ga-3">
-        <v-btn color="success" small @click="updateSkill"> Update </v-btn>
+        <v-btn color="success" small @click="updateExperience"> Update </v-btn>
         <v-btn color="success" small @click="cancelEdit"> Cancel </v-btn>
       </div>
     </v-form>
@@ -30,36 +22,41 @@
   </div>
 
   <div v-else>
-    <p>Please click on a Skill...</p>
+    <p>Please click on a Experience...</p>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
-import SkillService from "@/services/skill.service";
+import ExperienceService from "@/services/experience.service";
 import router from "../router";
 
 const route = useRoute();
 const user = JSON.parse(localStorage.getItem("user"));
-const currentSkill = ref();
+const currentExperience = ref();
 const message = ref("");
 
-const fetchUserSkill = async () => {
-  var skillId = route.params.id;
-  SkillService.get(user.id, skillId)
+const fetchUserExperience = async () => {
+  var experienceId = route.params.id;
+  ExperienceService.get(user.id, experienceId)
     .then((response) => {
-      currentSkill.value = response.data;
+      console.log(response);
+      currentExperience.value = response.data;
     })
     .catch((e) => {
       console.log(e);
     });
 };
 
-const updateSkill = async () => {
-  SkillService.update(user.id, currentSkill.value.id, currentSkill.value)
+const updateExperience = async () => {
+  ExperienceService.update(
+    user.id,
+    currentExperience.value.id,
+    currentExperience.value
+  )
     .then((response) => {
-      message.value = "The skill was updated successfully!";
+      message.value = "The experience was updated successfully!";
       router.push({ path: "/user" });
     })
     .catch((e) => {
@@ -72,7 +69,7 @@ const cancelEdit = async () => {
 };
 
 onMounted(() => {
-  fetchUserSkill();
+  fetchUserExperience();
 });
 </script>
 

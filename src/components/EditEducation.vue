@@ -77,60 +77,54 @@
   </div>
 
   <div v-else>
-    <p>Please click on a Education... {{ id }}</p>
+    <p>Please click on an education... {{ id }}</p>
   </div>
 </template>
 
-<script>
-import EducationService from "../services/education.service";
+<script setup>
+import { ref, onMounted } from "vue";
+import { useRoute } from "vue-router";
+import EducationService from "@/services/education.service";
 import router from "../router";
 
-export default {
-  name: "education",
-  data() {
-    return {
-      currentEducation: null,
-      message: "",
-    };
-  },
-  async mounted() {
-    this.getEducation(this.$route.params.id);
-  },
-  methods: {
-    getEducation(id) {
-      const user = JSON.parse(localStorage.getItem("user"));
-      EducationService.get(user.id, id)
-        .then((response) => {
-          console.log(response);
-          this.currentEducation = response.data;
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
+const route = useRoute();
+const user = JSON.parse(localStorage.getItem("user"));
+const currentEducation = ref();
+const message = ref("");
 
-    updateEducation() {
-      const user = JSON.parse(localStorage.getItem("user"));
-      EducationService.update(
-        user.id,
-        this.currentEducation.id,
-        this.currentEducation
-      )
-        .then((response) => {
-          console.log(response.data);
-          this.message = "The character was updated successfully!";
-          router.push({ path: "/user"});
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
-
-    cancelEdit(){
-      router.push({ path: "/user"});
-    }
-  },
+const fetchUserEducation = async () => {
+  var educationId = route.params.id;
+  EducationService.get(user.id, educationId)
+    .then((response) => {
+      currentEducation.value = response.data;
+    })
+    .catch((e) => {
+      console.log(e);
+    });
 };
+
+const updateEducation = async () => {
+  EducationService.update(
+    user.id,
+    currentEducation.value.id,
+    currentEducation.value
+  )
+    .then((response) => {
+      message.value = "The education was updated successfully!";
+      router.push({ path: "/user" });
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+};
+
+const cancelEdit = async () => {
+  router.push({ path: "/user" });
+};
+
+onMounted(() => {
+  fetchUserEducation();
+});
 </script>
 
 <style>

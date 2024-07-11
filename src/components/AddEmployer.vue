@@ -1,6 +1,6 @@
 <template>
     <div class="submit-form mt-3 mx-auto">
-      <h2 class="headline">Add EMployer</h2>
+      <h2 class="headline">Add Employer</h2>
   
       <div v-if="!submitted">
         <v-form ref="form" lazy-validation>

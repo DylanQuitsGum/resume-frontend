@@ -55,7 +55,7 @@
         SkillService.get(user.id, id)
           .then((response) => {
             console.log(response);
-            this.currentAward = response.data;
+            this.currentSkill = response.data;
           })
           .catch((e) => {
             console.log(e);

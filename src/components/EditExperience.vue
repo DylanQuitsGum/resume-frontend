@@ -28,19 +28,21 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
+import { useRoute } from 'vue-router';
 import ExperienceService from "@/services/experience.service";
 import router from "../router";
 
-const experienceId = this.$route.params.id;
+const route = useRoute();
 const user = JSON.parse(localStorage.getItem("user"));
 const currentExperience = ref();
 const message = ref("");
 
 const fetchUserExperience = async () => {
+  var experienceId = route.params.id;
   ExperienceService.get(user.id, experienceId)
     .then((response) => {
       console.log(response);
-      this.currentExperience = response.data;
+      currentExperience.value = response.data;
     })
     .catch((e) => {
       console.log(e);
@@ -50,12 +52,11 @@ const fetchUserExperience = async () => {
 const updateExperience = async () => {
   ExperienceService.update(
     user.id,
-    this.currentExperience.id,
-    this.currentExperience
+    currentExperience.value.id,
+    currentExperience.value
   )
     .then((response) => {
-      console.log(response.data);
-      this.message = "The experience was updated successfully!";
+      message.value = "The experience was updated successfully!";
       router.push({ path: "/user" });
     })
     .catch((e) => {

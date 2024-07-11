@@ -18,28 +18,28 @@
           <v-row no-gutters>
             <v-spacer></v-spacer>
             <v-col class="d-flex justify-start" cols="12" md="4">
-              <v-btn small @click="addEmployment"> Add Employer </v-btn>
+              <v-btn small @click="addEmployer"> Add Employer </v-btn>
             </v-col>
             <v-col cols="12" sm="12">
               <v-card class="mx-auto" tile>
                 <v-data-table
                   :headers="employerHeaders"
-                  :items="userEmployments"
+                  :items="userEmployers"
                   disable-pagination
                   :hide-default-footer="true"
                 >
                   <template v-slot:[`item.actions`]="{ item }">
-                    <v-icon small class="mr-2" @click="editEmployment(item.id)"
+                    <v-icon small class="mr-2" @click="editEmployer(item.id)"
                       >mdi-pencil</v-icon
                     >
-                    <v-icon small class="mr-2" @click="deleteEmployment(item.id)"
+                    <v-icon small class="mr-2" @click="deleteEmployer(item.id)"
                       >mdi-delete</v-icon
                     >
                   </template>
                 </v-data-table>
 
-                <v-card-actions v-if="userEmployments.length > 0">
-                  <v-btn small color="error" @click="removeAllEmployments">
+                <v-card-actions v-if="userEmployers.length > 0">
+                  <v-btn small color="error" @click="removeAllEmployers">
                     Remove All
                   </v-btn>
                 </v-card-actions>
@@ -294,7 +294,7 @@
 import { onMounted, ref, watch } from "vue";
 
 import EducationService from "@/services/education.service";
-import EmploymentService from "@/services/employer.service";
+import EmployerService from "@/services/employer.service";
 import SkillService from "@/services/skill.service";
 import AwardService from "@/services/award.service";
 import ExperienceService from "@/services/experience.service";
@@ -305,7 +305,7 @@ import router from "../router";
 const user = JSON.parse(localStorage.getItem("user"));
 
 const userEducations = ref([]);
-const userEmployments = ref([]);
+const userEmployers = ref([]);
 const userSkills = ref([]);
 const userAwards = ref([]);
 const userExperiences = ref([]);
@@ -373,7 +373,7 @@ const linkHeaders = ref([
 
 const fetchData = async () => {
   fetchUserEducations();
-  fetchUserEmployment();
+  fetchUserEmployers();
   fetchUserSkills();
   fetchUserAwards();
   fetchUserExperiences();
@@ -424,13 +424,13 @@ const deleteEducation = async (id) => {
 };
 
 
-const fetchUserEmployment = async () => {
+const fetchUserEmployers = async () => {
   try {
-    const res = await EmploymentService.getAll(user.id);
+    const res = await EmployerService.getAll(user.id);
     const { status, data } = res;
 
     if (status == 200) {
-      userEmployments.value = data.map((c) => ({
+      userEmployers.value = data.map((c) => ({
         ...c,
         employerName: c.employerName,
         enabled: false,
@@ -440,27 +440,27 @@ const fetchUserEmployment = async () => {
     console.error(err);
   }
 };
-const addEmployment = async () => {
-  router.push({ path: "addEmployment" });
+const addEmployer = async () => {
+  router.push({ path: "addEmployer" });
 };
-const removeAllEmployments = async () => {
+const removeAllEmployers = async () => {
       const user = JSON.parse(localStorage.getItem("user"));
-      EmploymentService.deleteAll(user.id)
+      EmployerService.deleteAll(user.id)
         .then((response) => {
-          this.fetchUserEmployments();
+          this.fetchUserEmployers();
         })
         .catch((e) => {
           console.log(e);
         });
 };
-const editEmployment = async (id) => {
-  router.push({ path: `editEmployment/${id}` });
+const editEmployer = async (id) => {
+  router.push({ path: `editEmployer/${id}` });
 };
-const deleteEmployment = async (id) => {
+const deleteEmployer = async (id) => {
       const user = JSON.parse(localStorage.getItem("user"));
-      EmploymentService.delete(user.id, id)
+      EmployerService.delete(user.id, id)
         .then(() => {
-          this.fetchUserEmployments();
+          this.fetchUserEmployers();
         })
         .catch((e) => {
           console.log(e);

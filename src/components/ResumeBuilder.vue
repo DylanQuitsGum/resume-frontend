@@ -128,11 +128,21 @@ import UserService from '@/services/user.service';
 
 import { jsPDF} from 'jspdf';
 import { useEditor, EditorContent } from "@tiptap/vue-3";
-import StarterKit from "@tiptap/starter-kit";
+import Document from "@tiptap/extension-document";
+import Paragraph from "@tiptap/extension-paragraph";
+import Text from '@tiptap/extension-text';
+import BubbleMenu from "@tiptap/extension-bubble-menu";
+
+// import StarterKit from "@tiptap/starter-kit";
 
 const editor = useEditor({
   content: '<p>I’m running Tiptap with Vue.js. 🎉</p>',
-  extensions: [StarterKit]
+  extensions: [Document, Paragraph, Text,    BubbleMenu.configure({
+    shouldShow: ({ editor, view, state, oldState, from, to }) => {
+      return editor.isActive('image') || editor.isActive('link')
+    },
+      element: document.querySelector('.menu'),
+    }), ]
 });
 
 const router = useRouter();

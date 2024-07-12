@@ -311,7 +311,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, getCurrentInstance } from "vue";
 import { useRouter } from "vue-router";
 
 import EducationService from "@/services/education.service";
@@ -322,6 +322,7 @@ import ExperienceService from "@/services/experience.service";
 import LinkService from "@/services/link.service";
 
 const router = useRouter();
+const instance = getCurrentInstance();
 
 const user = JSON.parse(localStorage.getItem("user"));
 
@@ -672,6 +673,8 @@ const viewResumes = async() => {
 };
 
 onMounted(() => {
+  console.log(instance?.proxy);
+  instance?.proxy?.$forceUpdate();
   fetchData();
 });
 </script>

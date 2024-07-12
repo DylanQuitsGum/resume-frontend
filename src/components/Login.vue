@@ -41,6 +41,10 @@ import { ref } from "vue";
 import authService from "@/services/auth.service";
 import router from "../router";
 
+
+
+
+// const instance = getCurrentInstance();
 const errorMessage = ref("");
 
 const user = ref({
@@ -55,8 +59,10 @@ const user = ref({
 });
 
 async function signin() {
+  console.log('Login: signin');
   try {
     const data = await authService.signin(user.value);
+
     errorMessage.value = "";
 
     router.push({ name: "home" });

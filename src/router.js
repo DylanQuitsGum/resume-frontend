@@ -343,23 +343,6 @@ const routes = [
       next();
     }
   },
-  {
-    path: "/editResume",
-    name: "editResume",
-    meta: { requiresAuth: true },
-    component: EditResume,
-    beforeEnter: (to, from, next) => {
-      const user = JSON.parse(localStorage.getItem("user"));
-      if(!user){
-        next(
-          {
-            path: "/login"
-          }
-        );
-      }
-      next();
-    }
-  },
 ];
 
 const router = createRouter({

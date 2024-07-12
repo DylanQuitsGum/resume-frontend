@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app v-if="!showEditResume">
     <v-container>
       <v-stepper :items="['Education', 'Employment', 'Skills', 'Awards', 'Select Template', 'Build']">
         <template v-slot:item.1>
@@ -108,6 +108,11 @@
       </v-stepper>
     </v-container>
   </v-app>
+
+  <v-app v-if="showEditResume">
+    <VBtn @click="cancelBuildResume">Edit Input</VBtn>
+    <editor-content :editor="editor" />
+  </v-app>
 </template>
 
 <script setup>
@@ -122,6 +127,13 @@ import AwardService from '@/services/award.service';
 import UserService from '@/services/user.service';
 
 import { jsPDF} from 'jspdf';
+import { useEditor, EditorContent } from "@tiptap/vue-3";
+import StarterKit from "@tiptap/starter-kit";
+
+const editor = useEditor({
+  content: '<p>I’m running Tiptap with Vue.js. 🎉</p>',
+  extensions: [StarterKit]
+});
 
 const router = useRouter();
 
@@ -140,6 +152,8 @@ const userEmployments = ref([]);
 const userSkills = ref([]);
 const userAwards = ref([]);
 const templateModel = ref('');
+
+const showEditResume = ref(false);
 
 watch (templateModel, async (newValue, oldValue) => {
   console.log(templateModel.value);
@@ -243,38 +257,12 @@ const fetchUserInformation = async () => {
 };
 
 const buildResume = async () => {
-  switch(templateModel.value){
-    case 0:
-      buildTemplate1();
-      break;
-    case 1:
-      buildTemplate2();
-      break;
-    case 2:
-      buildTemplate3();
-       break;
-    case 3:
-      buildTemplate4();
-      break;
-  }
+  showEditResume.value = true;
 };
 
-const buildTemplate1 = async () => {
-  router.push({ path: '/editResume' });
+const cancelBuildResume = async() => {
+  showEditResume.value = false;
 };
-
-const buildTemplate2 = async () => {
-  router.push({ path: '/editResume' });
-};
-
-const buildTemplate3 = async () => {
-  router.push({ path: '/editResume' });
-};
-
-const buildTemplate4 = async () => {
-  router.push({ path: '/editResume' });
-};
-
 
 onMounted(() => {
   fetchData();

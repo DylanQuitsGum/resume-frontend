@@ -3,6 +3,7 @@ import Home from "./components/Home.vue";
 import Login from "./components/Login.vue";
 import Register from "./components/Register.vue";
 
+const EditResume = () => import("./components/EditResume.vue");
 const ResumeBuilder = () => import("./components/ResumeBuilder.vue");
 
 const AddEmployer = () => import("./components/AddEmployer.vue");
@@ -335,13 +336,30 @@ const routes = [
       if(!user){
         next(
           {
-            name: "login"
+            path: "/login"
           }
         );
       }
       next();
     }
-  }
+  },
+  {
+    path: "/editResume",
+    name: "editResume",
+    meta: { requiresAuth: true },
+    component: EditResume,
+    beforeEnter: (to, from, next) => {
+      const user = JSON.parse(localStorage.getItem("user"));
+      if(!user){
+        next(
+          {
+            path: "/login"
+          }
+        );
+      }
+      next();
+    }
+  },
 ];
 
 const router = createRouter({

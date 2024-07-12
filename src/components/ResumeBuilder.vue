@@ -113,6 +113,8 @@
 <script setup>
 import { onMounted, ref, watch } from "vue";
 
+import { useRouter } from "vue-router";
+
 import EducationService from "@/services/education.service";
 import EmploymentService from '@/services/employer.service';
 import SkillService from '@/services/skill.service';
@@ -120,6 +122,8 @@ import AwardService from '@/services/award.service';
 import UserService from '@/services/user.service';
 
 import { jsPDF} from 'jspdf';
+
+const router = useRouter();
 
 const user = JSON.parse(localStorage.getItem("user"));
 const userInformation = ref({
@@ -256,19 +260,19 @@ const buildResume = async () => {
 };
 
 const buildTemplate1 = async () => {
-
+  router.push({ path: '/editResume' });
 };
 
 const buildTemplate2 = async () => {
-  
+  router.push({ path: '/editResume' });
 };
 
 const buildTemplate3 = async () => {
-  console.log('build 3');
+  router.push({ path: '/editResume' });
 };
 
 const buildTemplate4 = async () => {
-  console.log('build 4');
+  router.push({ path: '/editResume' });
 };
 
 

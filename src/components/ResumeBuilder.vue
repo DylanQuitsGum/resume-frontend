@@ -1,8 +1,19 @@
 <template>
   <v-app v-if="!showEditResume">
     <v-container>
-      <v-stepper :items="['Education', 'Employment', 'Skills', 'Awards', 'Select Template', 'Build']">
+      <v-stepper :items="['Questions', 'Education', 'Employment', 'Skills', 'Awards', 'Select Template', 'Build']">
+
         <template v-slot:item.1>
+          <v-card title="Tell us about your new career!" elevation="10">
+
+            <v-card-actions>
+
+            </v-card-actions>
+
+          </v-card>
+        </template>
+        
+        <template v-slot:item.2>
           <v-card title="Select Education History" elevation="10">
             <v-data-table-virtual :items="userEducations"
               disable-pagination :hide-default-footer="true">
@@ -18,7 +29,7 @@
           </v-card>
         </template>
 
-        <template v-slot:item.2>
+        <template v-slot:item.3>
           <v-card title="Select Employment History" elevation="10">
             <v-data-table-virtual :items="userEmployments"
               disable-pagination :hide-default-footer="true">
@@ -34,7 +45,7 @@
           </v-card>
         </template>
 
-        <template v-slot:item.3>
+        <template v-slot:item.4>
           <v-card title="Select Skills" elevation="10">
             <v-data-table-virtual :items="userSkills"
               disable-pagination :hide-default-footer="true">
@@ -50,7 +61,7 @@
           </v-card>
         </template>
 
-        <template v-slot:item.4>
+        <template v-slot:item.5>
           <v-card title="Select Awards" elevation="10">
             <v-data-table-virtual :items="userAwards"
               disable-pagination :hide-default-footer="true">
@@ -66,7 +77,7 @@
           </v-card>
         </template>
 
-        <template v-slot:item.5>
+        <template v-slot:item.6>
           <v-sheet class="mx-auto" elevation="8" max-width="800" >
             <v-slide-group v-model="templateModel"
                            class="pa-4"
@@ -98,7 +109,7 @@
   </v-sheet>
         </template>
 
-        <template v-slot:item.6>
+        <template v-slot:item.7>
           <v-card title="Build Resume" flat>
             <v-card-actions>
               <VBtn @click="buildResume">Build it</VBtn>
@@ -111,6 +122,36 @@
 
   <v-app v-if="showEditResume">
     <VBtn @click="cancelBuildResume">Edit Input</VBtn>
+    <template>
+      <div v-if="editor">
+        <bubble-menu class="bubble-menu"
+                     :tippy-options="{ duration: 100 }"
+                     :editor="editor">
+          <button @click="editor.chain().focus().toggleBold().run()" :class="{ 'is-active': editor.isActive('bold') }">
+            Bold
+          </button>
+          <button @click="editor.chain().focus().toggleItalic().run()" :class="{ 'is-active': editor.isActive('italic') }">
+            Italic
+          </button>
+          <button @click="editor.chain().focus().toggleStrike().run()" :class="{ 'is-active': editor.isActive('strike') }">
+            Strike
+          </button>
+        </bubble-menu>
+        <floating-menu class="floating-menu"
+                       :tippy-options="{ duration: 100 }"
+                       :editor="editor">
+          <button @click="editor.chain().focus().toggleHeading({ level: 1 }).run()" :class="{ 'is-active': editor.isActive('heading', { level: 1 }) }">
+            H1
+          </button>
+          <button @click="editor.chain().focus().toggleHeading({ level: 2 }).run()" :class="{ 'is-active': editor.isActive('heading', { level: 2 }) }">
+            H2
+          </button>
+          <button @click="editor.chain().focus().toggleBulletList().run()" :class="{ 'is-active': editor.isActive('bulletList') }">
+            Bullet list
+          </button>
+        </floating-menu>
+      </div>
+    </template>
     <editor-content :editor="editor" />
   </v-app>
 </template>
@@ -126,24 +167,20 @@ import SkillService from '@/services/skill.service';
 import AwardService from '@/services/award.service';
 import UserService from '@/services/user.service';
 
-import { jsPDF} from 'jspdf';
-import { useEditor, EditorContent } from "@tiptap/vue-3";
-import Document from "@tiptap/extension-document";
-import Paragraph from "@tiptap/extension-paragraph";
-import Text from '@tiptap/extension-text';
-import BubbleMenu from "@tiptap/extension-bubble-menu";
+import {
+  BubbleMenu,
+  Editor,
+  EditorContent,
+  FloatingMenu,
+} from '@tiptap/vue-3'
+import StarterKit from "@tiptap/starter-kit";
 
-// import StarterKit from "@tiptap/starter-kit";
-
-const editor = useEditor({
-  content: '<p>I’m running Tiptap with Vue.js. 🎉</p>',
-  extensions: [Document, Paragraph, Text,    BubbleMenu.configure({
-    shouldShow: ({ editor, view, state, oldState, from, to }) => {
-      return editor.isActive('image') || editor.isActive('link')
-    },
-      element: document.querySelector('.menu'),
-    }), ]
-});
+const editor = ref(new Editor({
+      extensions: [
+        StarterKit,
+      ],
+      content: '',
+    }));
 
 const router = useRouter();
 
@@ -168,6 +205,10 @@ const showEditResume = ref(false);
 watch (templateModel, async (newValue, oldValue) => {
   console.log(templateModel.value);
 });
+
+const buildEditor = async () => {
+
+};
 
 const fetchData = async () => {
   fetchUserEducations();
@@ -267,6 +308,21 @@ const fetchUserInformation = async () => {
 };
 
 const buildResume = async () => {
+  console.log(templateModel.value);
+  switch(templateModel.value){
+    case 0:
+      buildTemplate1();
+    break;
+    case 1:
+      buildTemplate2();
+    break;
+    case 2:
+      buildTemplate3();
+    break;
+    case 3:
+      buildTemplate4();
+    break;
+  }
   showEditResume.value = true;
 };
 
@@ -274,7 +330,173 @@ const cancelBuildResume = async() => {
   showEditResume.value = false;
 };
 
+function UserName() {
+  return `${userInformation.value.firstName} ${userInformation.value.lastName}`;
+}
+
+function UserInfo(){
+  return `${userInformation.value.city}, ${userInformation.value.state} | ${userInformation.value.phoneNumber} | ${userInformation.value.email} |`;
+}
+
+function ProfessionalSummary(){
+  return "This will be generated via Cohere.</br>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod " +
+         "tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam," +
+         " quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat." +
+         " Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu " + 
+         " fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt " + 
+         "in culpa qui officia deserunt mollit anim id est laborum.";
+}
+
+function EducationHistoryTemplate1(){
+  var educationHistory = '';
+
+  for(let i = 0;i < userEducations.value.length;i++){
+    var item = userEducations.value[i];
+    educationHistory += `<bold>${item.institutionName},${item.city},${item.state}</bold>     ${item.beginDate} - ${item.degreeAwardedDate ? item.degreeAwardedDate : 'Projected'}<br>`;
+    educationHistory += `${item.fieldOfStudy}<br>`;
+    educationHistory += `<em>Need to add GPA</em><br>`;
+    educationHistory += "<em>Need to add Awards</em><br>";
+    educationHistory += "<em>Need to add Coursework</em><br>";
+    educationHistory += "<br>";
+  }
+
+  return educationHistory;
+}
+
+function ProfessionalHistory1(){
+  var professionalHistory = '';
+
+  for(let i = 0;i < userEmployments.value.length;i++){
+    var item = userEmployments.value[i];
+    professionalHistory += `${item.employerName}, ${item.position}, ${item.city}, ${item.state}`;
+    professionalHistory += "<ul>";
+    for(let ii = 0;ii < 3;ii++){
+      professionalHistory += `<li>Accomplished X, as measured by Y, by doing Z`;
+    }
+    professionalHistory += "</ul>";
+  }
+
+  return professionalHistory;
+}
+
+function Skills1(){
+  var skills = '';
+
+  skills += "<ul>";
+  for(let i = 0;i < userSkills.value.length;i++){
+    var item = userSkills.value[i];
+    skills += `<li>${item.skillName}: ${item.skillLevel}`;
+  }
+  skills += "</ul>";
+
+  return skills;
+}
+
+function EducationHistoryTemplate2(){
+  var educationHistory = '';
+
+  for(let i = 0;i < userEducations.value.length;i++){
+    var item = userEducations.value[i];
+    educationHistory += `<bold>${item.institutionName},${item.city},${item.state}</bold>     ${item.beginDate} - ${item.degreeAwardedDate ? item.degreeAwardedDate : 'Projected'}<br>`;
+    educationHistory += `${item.fieldOfStudy}<br>`;
+    educationHistory += `<em>Need to add GPA</em><br>`;
+    educationHistory += "<em>Need to add Awards</em><br>";
+    educationHistory += "<em>Need to add Coursework</em><br>";
+    educationHistory += "<br>";
+  }
+
+  return educationHistory;
+}
+
+function EducationHistoryTemplate3(){
+  var educationHistory = '';
+
+  for(let i = 0;i < userEducations.value.length;i++){
+    var item = userEducations.value[i];
+    educationHistory += `<bold>${item.institutionName},${item.city},${item.state}</bold>     ${item.beginDate} - ${item.degreeAwardedDate ? item.degreeAwardedDate : 'Projected'}<br>`;
+    educationHistory += `${item.fieldOfStudy}<br>`;
+    educationHistory += `<em>Need to add GPA</em><br>`;
+    educationHistory += "<em>Need to add Awards</em><br>";
+    educationHistory += "<em>Need to add Coursework</em><br>";
+    educationHistory += "<br>";
+  }
+
+  return educationHistory;
+}
+
+function EducationHistoryTemplate4(){
+  var educationHistory = '';
+
+  for(let i = 0;i < userEducations.value.length;i++){
+    var item = userEducations.value[i];
+    educationHistory += `<bold>${item.institutionName},${item.city},${item.state}</bold>     ${item.beginDate} - ${item.degreeAwardedDate ? item.degreeAwardedDate : 'Projected'}<br>`;
+    educationHistory += `${item.fieldOfStudy}<br>`;
+    educationHistory += `<em>Need to add GPA</em><br>`;
+    educationHistory += "<em>Need to add Awards</em><br>";
+    educationHistory += "<em>Need to add Coursework</em><br>";
+    educationHistory += "<br>";
+  }
+
+  return educationHistory;
+}
+
+const buildTemplate1 = async() => {
+  var html = '';
+  html += `<span{align=center}><bold>${UserName()}</bold></span><br>`;
+  html += `${UserInfo()}<br><br>`;
+  html += "Professional Summary";
+  html += "<hr>"
+  html += `${ProfessionalSummary()}<br><br>`;
+  html += "Education";
+  html += "<hr>";
+  html += `${EducationHistoryTemplate1()}`;
+  html += "Professional Experience";
+  html += "<hr>";
+  html += `${ProfessionalHistory1()}`;
+  html += "Skills | Leadership Skills | Activities | Extracurricular Activies";
+  html += "<hr>";
+  html += `${Skills1()}`;
+  editor.value.commands.setContent(html);
+};
+
+const buildTemplate2 = async() => {
+  var html = '';
+  html += `<bold>${UserName()}</bold><br>`;
+  html += `${UserInfo()}<br><br>`;
+  html += "Professional Summary<br>";
+  html += `${ProfessionalSummary()}<br><br>`;
+  html += "Education<br>";
+  html += `${EducationHistoryTemplate2()}`;
+  editor.value.commands.setContent(html);
+};
+
+const buildTemplate3 = async() => {
+  var html = '';
+  html += `<bold>${UserName()}</bold><br>`;
+  html += `${UserInfo()}<br><br>`;
+  html += "<hr/>"
+  html += `${ProfessionalSummary()}<br>`;
+  html += "Education";
+  html += "<hr/>";
+  html += `${EducationHistoryTemplate3()}`;
+  editor.value.commands.setContent(html);
+};
+
+const buildTemplate4 = async() => {
+  var html = '';
+  html += `<bold>${UserName()}</bold></br>`;
+  html += `${UserInfo()}</br></br>`;
+  html += "Objective<br><br>";
+  html += `${ProfessionalSummary()}</br>`;
+  html += "Education<br>";
+  html += `${EducationHistoryTemplate4()}`;
+  
+  editor.value.commands.setContent(html);
+};
+
 onMounted(() => {
   fetchData();
+  buildEditor();
 });
+
 </script>

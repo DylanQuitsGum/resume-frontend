@@ -166,6 +166,7 @@ import EmploymentService from '@/services/employer.service';
 import SkillService from '@/services/skill.service';
 import AwardService from '@/services/award.service';
 import UserService from '@/services/user.service';
+import AIService from '@/services/ai.service';
 
 import {
   BubbleMenu,
@@ -201,6 +202,8 @@ const userAwards = ref([]);
 const templateModel = ref('');
 
 const showEditResume = ref(false);
+
+const jobDescription = ref('Computer Scientist');
 
 watch (templateModel, async (newValue, oldValue) => {
   console.log(templateModel.value);
@@ -338,7 +341,19 @@ function UserInfo(){
   return `${userInformation.value.city}, ${userInformation.value.state} | ${userInformation.value.phoneNumber} | ${userInformation.value.email} |`;
 }
 
-function ProfessionalSummary(){
+async function ProfessionalSummary(){
+  var request = {
+    preamble: 'You are a resume writer for technical positions',
+    prompt: 'Write me a objective statement for a senior level .Net programming position. Only give me the objective statement.'
+  };
+
+  const res = await AIService.getObjective(request);
+  const { status, data } = res;
+
+  if(status == 200){
+    return data;
+  }
+
   return "This will be generated via Cohere.</br>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod " +
          "tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam," +
          " quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat." +

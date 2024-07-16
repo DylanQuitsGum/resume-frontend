@@ -122,6 +122,7 @@
 
   <v-app v-if="showEditResume">
     <VBtn @click="cancelBuildResume">Edit Input</VBtn>
+    <VBtn @click="saveResume">Save Resume</VBtn>
     <template>
       <div v-if="editor">
         <bubble-menu class="bubble-menu"
@@ -167,6 +168,7 @@ import SkillService from '@/services/skill.service';
 import AwardService from '@/services/award.service';
 import UserService from '@/services/user.service';
 import AIService from '@/services/ai.service';
+import ResumeService from '@/services/resume.service';
 
 import {
   BubbleMenu,
@@ -175,7 +177,6 @@ import {
   FloatingMenu,
 } from '@tiptap/vue-3'
 import StarterKit from "@tiptap/starter-kit";
-import { faL } from "@fortawesome/free-solid-svg-icons";
 
 const editor = ref(new Editor({
       extensions: [
@@ -188,6 +189,7 @@ const router = useRouter();
 
 const professionalSummary = ref();
 const professionalSummaryLoaded = ref(false);
+const resumeText = ref('');
 
 const user = JSON.parse(localStorage.getItem("user"));
 const userInformation = ref({
@@ -217,6 +219,8 @@ watch (templateModel, async (newValue, oldValue) => {
 const buildEditor = async () => {
 
 };
+
+// #region Fetch Data
 
 const fetchData = async () => {
   fetchUserEducations();
@@ -315,6 +319,8 @@ const fetchUserInformation = async () => {
   }
 };
 
+// #endregion
+
 const buildResume = async () => {
   console.log(templateModel.value);
   switch(templateModel.value){
@@ -336,6 +342,14 @@ const buildResume = async () => {
 
 const cancelBuildResume = async() => {
   showEditResume.value = false;
+};
+
+const saveResume = async() => {
+  var data = {
+    resumeText: resumeText.value,
+    userId: user.id
+  };
+  const res = await ResumeService.create(user.id, data);
 };
 
 function UserName() {
@@ -544,6 +558,7 @@ function Skills4(){
 
 // #endregion
 
+// #region Build Templates
 const buildTemplate1 = async() => {
   var html = '';
   html += `<span{align=center}><bold>${UserName()}</bold></span><br>`;
@@ -560,6 +575,7 @@ const buildTemplate1 = async() => {
   html += "Skills | Leadership Skills | Activities | Extracurricular Activies";
   html += "<hr>";
   html += `${Skills1()}`;
+  resumeText.value = html;
   editor.value.commands.setContent(html);
 };
 
@@ -579,6 +595,7 @@ const buildTemplate2 = async() => {
   html += "Skills | Leadership Skills | Activities | Extracurricular Activies";
   html += "<hr>";
   html += `${Skills2()}`;
+  resumeText.value = html;
   editor.value.commands.setContent(html);
 };
 
@@ -598,6 +615,7 @@ const buildTemplate3 = async() => {
   html += "Skills | Leadership Skills | Activities | Extracurricular Activies";
   html += "<hr>";
   html += `${Skills3()}`;
+  resumeText.value = html;
   editor.value.commands.setContent(html);
 };
 
@@ -617,10 +635,11 @@ const buildTemplate4 = async() => {
   html += "Skills | Leadership Skills | Activities | Extracurricular Activies";
   html += "<hr>";
   html += `${Skills4()}`;
-  editor.value.commands.setContent(html);
-  
+  resumeText.value = html;
   editor.value.commands.setContent(html);
 };
+
+// #endregion
 
 onMounted(() => {
   fetchData();

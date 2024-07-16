@@ -175,6 +175,7 @@ import {
   FloatingMenu,
 } from '@tiptap/vue-3'
 import StarterKit from "@tiptap/starter-kit";
+import { faL } from "@fortawesome/free-solid-svg-icons";
 
 const editor = ref(new Editor({
       extensions: [
@@ -184,6 +185,9 @@ const editor = ref(new Editor({
     }));
 
 const router = useRouter();
+
+const professionalSummary = ref();
+const professionalSummaryLoaded = ref(false);
 
 const user = JSON.parse(localStorage.getItem("user"));
 const userInformation = ref({
@@ -200,6 +204,7 @@ const userEmployments = ref([]);
 const userSkills = ref([]);
 const userAwards = ref([]);
 const templateModel = ref('');
+
 
 const showEditResume = ref(false);
 
@@ -341,27 +346,18 @@ function UserInfo(){
   return `${userInformation.value.city}, ${userInformation.value.state} | ${userInformation.value.phoneNumber} | ${userInformation.value.email} |`;
 }
 
-async function ProfessionalSummary(){
+function ProfessionalSummary(){
   var request = {
-    preamble: 'You are a resume writer for technical positions',
-    prompt: 'Write me a objective statement for a senior level .Net programming position. Only give me the objective statement.'
+    preamble: 'You are a resume writer',
+    prompt: 'Write me an objective statement for an senior developer position.  Only give me the objective statement.'
   };
 
-  const res = await AIService.getObjective(request);
-  const { status, data } = res;
-
-  if(status == 200){
-    return data;
-  }
-
-  return "This will be generated via Cohere.</br>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod " +
-         "tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam," +
-         " quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat." +
-         " Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu " + 
-         " fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt " + 
-         "in culpa qui officia deserunt mollit anim id est laborum.";
+  return 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore ' + 
+         'et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ' + 
+         'ut aliquip ex ea commodo consequat.';
 }
 
+//#region Education History
 function EducationHistoryTemplate1(){
   var educationHistory = '';
 
@@ -376,35 +372,6 @@ function EducationHistoryTemplate1(){
   }
 
   return educationHistory;
-}
-
-function ProfessionalHistory1(){
-  var professionalHistory = '';
-
-  for(let i = 0;i < userEmployments.value.length;i++){
-    var item = userEmployments.value[i];
-    professionalHistory += `${item.employerName}, ${item.position}, ${item.city}, ${item.state}`;
-    professionalHistory += "<ul>";
-    for(let ii = 0;ii < 3;ii++){
-      professionalHistory += `<li>Accomplished X, as measured by Y, by doing Z`;
-    }
-    professionalHistory += "</ul>";
-  }
-
-  return professionalHistory;
-}
-
-function Skills1(){
-  var skills = '';
-
-  skills += "<ul>";
-  for(let i = 0;i < userSkills.value.length;i++){
-    var item = userSkills.value[i];
-    skills += `<li>${item.skillName}: ${item.skillLevel}`;
-  }
-  skills += "</ul>";
-
-  return skills;
 }
 
 function EducationHistoryTemplate2(){
@@ -454,13 +421,135 @@ function EducationHistoryTemplate4(){
 
   return educationHistory;
 }
+//#endregion
+
+//#region ProfessionalHistory
+function ProfessionalHistory1(){
+  var professionalHistory = '';
+
+  for(let i = 0;i < userEmployments.value.length;i++){
+    var item = userEmployments.value[i];
+    professionalHistory += `${item.employerName}, ${item.position}, ${item.city}, ${item.state}`;
+    professionalHistory += "<ul>";
+    for(let ii = 0;ii < 3;ii++){
+      professionalHistory += `<li>Accomplished X, as measured by Y, by doing Z`;
+    }
+    professionalHistory += "</ul>";
+  }
+
+  return professionalHistory;
+}
+
+function ProfessionalHistory2(){
+  var professionalHistory = '';
+
+  for(let i = 0;i < userEmployments.value.length;i++){
+    var item = userEmployments.value[i];
+    professionalHistory += `${item.employerName}, ${item.position}, ${item.city}, ${item.state}`;
+    professionalHistory += "<ul>";
+    for(let ii = 0;ii < 3;ii++){
+      professionalHistory += `<li>Accomplished X, as measured by Y, by doing Z`;
+    }
+    professionalHistory += "</ul>";
+  }
+
+  return professionalHistory;
+}
+
+function ProfessionalHistory3(){
+  var professionalHistory = '';
+
+  for(let i = 0;i < userEmployments.value.length;i++){
+    var item = userEmployments.value[i];
+    professionalHistory += `${item.employerName}, ${item.position}, ${item.city}, ${item.state}`;
+    professionalHistory += "<ul>";
+    for(let ii = 0;ii < 3;ii++){
+      professionalHistory += `<li>Accomplished X, as measured by Y, by doing Z`;
+    }
+    professionalHistory += "</ul>";
+  }
+
+  return professionalHistory;
+}
+
+function ProfessionalHistory4(){
+  var professionalHistory = '';
+
+  for(let i = 0;i < userEmployments.value.length;i++){
+    var item = userEmployments.value[i];
+    professionalHistory += `${item.employerName}, ${item.position}, ${item.city}, ${item.state}`;
+    professionalHistory += "<ul>";
+    for(let ii = 0;ii < 3;ii++){
+      professionalHistory += `<li>Accomplished X, as measured by Y, by doing Z`;
+    }
+    professionalHistory += "</ul>";
+  }
+
+  return professionalHistory;
+}
+//#endregion
+
+// #region Skills
+function Skills1(){
+  var skills = '';
+
+  skills += "<ul>";
+  for(let i = 0;i < userSkills.value.length;i++){
+    var item = userSkills.value[i];
+    skills += `<li>${item.skillName}: ${item.skillLevel}`;
+  }
+  skills += "</ul>";
+
+  return skills;
+}
+
+function Skills2(){
+  var skills = '';
+
+  skills += "<ul>";
+  for(let i = 0;i < userSkills.value.length;i++){
+    var item = userSkills.value[i];
+    skills += `<li>${item.skillName}: ${item.skillLevel}`;
+  }
+  skills += "</ul>";
+
+  return skills;
+}
+
+function Skills3(){
+  var skills = '';
+
+  skills += "<ul>";
+  for(let i = 0;i < userSkills.value.length;i++){
+    var item = userSkills.value[i];
+    skills += `<li>${item.skillName}: ${item.skillLevel}`;
+  }
+  skills += "</ul>";
+
+  return skills;
+}
+
+function Skills4(){
+  var skills = '';
+
+  skills += "<ul>";
+  for(let i = 0;i < userSkills.value.length;i++){
+    var item = userSkills.value[i];
+    skills += `<li>${item.skillName}: ${item.skillLevel}`;
+  }
+  skills += "</ul>";
+
+  return skills;
+}
+
+// #endregion
 
 const buildTemplate1 = async() => {
   var html = '';
   html += `<span{align=center}><bold>${UserName()}</bold></span><br>`;
   html += `${UserInfo()}<br><br>`;
   html += "Professional Summary";
-  html += "<hr>"
+  html += "<hr>";
   html += `${ProfessionalSummary()}<br><br>`;
   html += "Education";
   html += "<hr>";
@@ -476,35 +565,59 @@ const buildTemplate1 = async() => {
 
 const buildTemplate2 = async() => {
   var html = '';
-  html += `<bold>${UserName()}</bold><br>`;
+  html += `<span{align=center}><bold>${UserName()}</bold></span><br>`;
   html += `${UserInfo()}<br><br>`;
-  html += "Professional Summary<br>";
+  html += "Professional Summary";
+  html += "<hr>";
   html += `${ProfessionalSummary()}<br><br>`;
-  html += "Education<br>";
+  html += "Education";
+  html += "<hr>";
   html += `${EducationHistoryTemplate2()}`;
+  html += "Professional Experience";
+  html += "<hr>";
+  html += `${ProfessionalHistory2()}`;
+  html += "Skills | Leadership Skills | Activities | Extracurricular Activies";
+  html += "<hr>";
+  html += `${Skills2()}`;
   editor.value.commands.setContent(html);
 };
 
 const buildTemplate3 = async() => {
   var html = '';
-  html += `<bold>${UserName()}</bold><br>`;
+  html += `<span{align=center}><bold>${UserName()}</bold></span><br>`;
   html += `${UserInfo()}<br><br>`;
-  html += "<hr/>"
-  html += `${ProfessionalSummary()}<br>`;
+  html += "Professional Summary";
+  html += "<hr>";
+  html += `${ProfessionalSummary()}<br><br>`;
   html += "Education";
-  html += "<hr/>";
+  html += "<hr>";
   html += `${EducationHistoryTemplate3()}`;
+  html += "Professional Experience";
+  html += "<hr>";
+  html += `${ProfessionalHistory3()}`;
+  html += "Skills | Leadership Skills | Activities | Extracurricular Activies";
+  html += "<hr>";
+  html += `${Skills3()}`;
   editor.value.commands.setContent(html);
 };
 
 const buildTemplate4 = async() => {
   var html = '';
-  html += `<bold>${UserName()}</bold></br>`;
-  html += `${UserInfo()}</br></br>`;
-  html += "Objective<br><br>";
-  html += `${ProfessionalSummary()}</br>`;
-  html += "Education<br>";
+  html += `<span{align=center}><bold>${UserName()}</bold></span><br>`;
+  html += `${UserInfo()}<br><br>`;
+  html += "Professional Summary";
+  html += "<hr>";
+  html += `${ProfessionalSummary()}<br><br>`;
+  html += "Education";
+  html += "<hr>";
   html += `${EducationHistoryTemplate4()}`;
+  html += "Professional Experience";
+  html += "<hr>";
+  html += `${ProfessionalHistory4()}`;
+  html += "Skills | Leadership Skills | Activities | Extracurricular Activies";
+  html += "<hr>";
+  html += `${Skills4()}`;
+  editor.value.commands.setContent(html);
   
   editor.value.commands.setContent(html);
 };

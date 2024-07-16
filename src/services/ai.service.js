@@ -2,10 +2,10 @@ import authHeader from "./auth.header";
 import apiClient from "./services";
 
 export default {
-  getObjective(request) {
-    return apiClient.get(`ai/`, {
+
+  getObjective(data) {
+    return apiClient.post(`ai/`, data, {
       headers: authHeader(),
     });
   },
-
 };

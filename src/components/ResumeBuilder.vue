@@ -348,7 +348,7 @@ const cancelBuildResume = async() => {
 const saveResume = async() => {
   var data = {
     resumeTitle: 'Resume Title',
-    resumeText: resumeText.value,
+    resumeText: editor.value.getHTML(),
     userId: user.id
   };
   const res = await ResumeService.create(user.id, data);

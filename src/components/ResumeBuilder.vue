@@ -169,6 +169,7 @@ import AwardService from '@/services/award.service';
 import UserService from '@/services/user.service';
 import AIService from '@/services/ai.service';
 import ResumeService from '@/services/resume.service';
+import jsPDF from 'jspdf';
 
 import {
   BubbleMenu,
@@ -346,11 +347,27 @@ const cancelBuildResume = async() => {
 
 const saveResume = async() => {
   var data = {
+    resumeTitle: 'Resume Title',
     resumeText: resumeText.value,
     userId: user.id
   };
   const res = await ResumeService.create(user.id, data);
+
+  createPDF();
 };
+
+const createPDF = async() => {
+  var doc = new jsPDF();
+  doc.html(resumeText.value, {
+    callback: function(doc){
+      doc.save('Resume.pdf');
+    },
+    x:15,
+    y:15,
+    width: 170,
+    windowWidth: 670
+  })
+}
 
 function UserName() {
   return `${userInformation.value.firstName} ${userInformation.value.lastName}`;

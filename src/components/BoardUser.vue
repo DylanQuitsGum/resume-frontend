@@ -669,7 +669,7 @@ const buildResume = async() => {
 };
 
 const viewResumes = async() => {
-  router.push({ path: '/resumes' })
+  router.push({ path: '/viewResumes' })
 };
 
 onMounted(() => {

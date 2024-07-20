@@ -60,6 +60,13 @@
         ></v-text-field>
 
         <v-text-field
+        variant="outlined"
+        v-model="currentEducation.gpa"
+        label="GPA"
+        required
+      ></v-text-field>
+
+        <v-text-field
           variant="outlined"
           v-model="education.fieldOfStudy"
           :rules="[(v) => !!v || 'Field of Study is required']"
@@ -105,6 +112,7 @@ const education = ref({
   zipCode: "90210",
   beginDate: "2001-01-01",
   degreeAwardDate: "2004-12-13",
+  gpa: 3.8,
   fieldOfStudy: "CS",
 });
 
@@ -118,6 +126,7 @@ const saveEducation = async () => {
     beginDate: education.value.beginDate,
     degreeAwardDate: education.value.degreeAwardDate,
     fieldOfStudy: education.value.fieldOfStudy,
+    gpa: education.value.gpa,
     userId: user.value.id,
   };
   EducationService.create(user.value.id, data)

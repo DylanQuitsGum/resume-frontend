@@ -181,8 +181,6 @@ const editor = ref(new Editor({
 
 const router = useRouter();
 
-const professionalSummary = ref();
-const professionalSummaryLoaded = ref(false);
 const resumeText = ref('');
 
 const user = JSON.parse(localStorage.getItem("user"));
@@ -200,7 +198,6 @@ const userEmployments = ref([]);
 const userSkills = ref([]);
 const userAwards = ref([]);
 const templateModel = ref('');
-
 
 const showEditResume = ref(false);
 
@@ -372,20 +369,24 @@ function UserInfo() {
 }
 
 function ProfessionalSummary() {
-  var request = {
+  if(objectiveStatement.value == undefined || objectiveStatement.value == ''){
+      var request = {
     preamble: 'You are a resume writer',
-    prompt: 'Write me an objective statement for an senior developer position.  Only give me the objective statement.'
+    prompt: `Write me an objective statement for an senior position in the ${jobDescription.value} industry.  Only give me the objective statement.`
   };
 
   AIService.getObjective(request)
     .then((response) => {
-      console.log(response.data);
-      objectiveStatement.value = response.data;
+      const output = response.data.response;
+      console.log(output);      
+      objectiveStatement.value = output;
+      return;
     });
+  }else{
+    return objectiveStatement.value;
+  }
 
-  return 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore ' +
-    'et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ' +
-    'ut aliquip ex ea commodo consequat.';
+  
 }
 
 //#region Education History
@@ -574,7 +575,11 @@ function Skills4() {
 }
 
 // #endregion
-
+function sleep(time) {
+    return new Promise((resolve) => {
+        setTimeout(resolve, time || 1000);
+    });
+}
 // #region Build Templates
 const buildTemplate1 = async () => {
   var html = '';
@@ -582,6 +587,14 @@ const buildTemplate1 = async () => {
   html += `${UserInfo()}<br><br>`;
   html += "Professional Summary";
   html += "<hr>";
+  var first = true;
+  while(objectiveStatement.value == undefined || objectiveStatement.value == ''){
+    if(first){
+      ProfessionalSummary();
+      first = false;
+      await sleep(3000);
+    }
+  }
   html += `${ProfessionalSummary()}<br><br>`;
   html += "Education";
   html += "<hr>";

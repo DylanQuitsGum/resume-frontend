@@ -339,6 +339,7 @@ const cancelBuildResume = async () => {
 const saveResume = async () => {
   var data = {
     resumeTitle: 'Resume Title',
+    jobDescription: jobDescription.value,
     resumeText: editor.value.getHTML(),
     userId: user.id
   };
@@ -397,7 +398,7 @@ function EducationHistoryTemplate1() {
     var item = userEducations.value[i];
     educationHistory += `<bold>${item.institutionName},${item.city},${item.state}</bold>     ${item.beginDate} - ${item.degreeAwardedDate ? item.degreeAwardedDate : 'Projected'}<br>`;
     educationHistory += `${item.fieldOfStudy}<br>`;
-    educationHistory += `<em>Need to add GPA</em><br>`;
+    educationHistory += `${item.gpa}<br>`;
     educationHistory += "<em>Need to add Awards</em><br>";
     educationHistory += "<em>Need to add Coursework</em><br>";
     educationHistory += "<br>";

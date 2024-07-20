@@ -60,6 +60,13 @@
 
       <v-text-field
         variant="outlined"
+        v-model="currentEducation.gpa"
+        label="GPA"
+        required
+      ></v-text-field>
+
+      <v-text-field
+        variant="outlined"
         v-model="currentEducation.fieldOfStudy"
         :rules="[(v) => !!v || 'Field of Study is required']"
         label="Field of Study"

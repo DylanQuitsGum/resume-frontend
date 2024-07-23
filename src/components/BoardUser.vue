@@ -467,6 +467,9 @@ const fetchUserEmployers = async () => {
 const addEmployer = async () => {
   router.push({ path: "addEmployer" });
 };
+const addDuty = async (id) => {
+  router.push({ path: `addDuty/${id}` });
+};
 const removeAllEmployers = async () => {
   const user = JSON.parse(localStorage.getItem("user"));
   EmployerService.deleteAll(user.id)

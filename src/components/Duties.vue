@@ -71,6 +71,16 @@ const addDuty = async() => {
   router.push({ path: `/addDuty/${employerId.value}` });
 };
 
+const deleteDuty = async (id) => {
+  DutyService.delete(employerId.value, id)
+    .then(() => {
+      fetchData();
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+};
+
 onMounted(() => {
   employerId.value = route.params.id;
   fetchData();

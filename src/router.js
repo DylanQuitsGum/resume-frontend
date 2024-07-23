@@ -3,6 +3,9 @@ import Home from "./components/Home.vue";
 import Login from "./components/Login.vue";
 import Register from "./components/Register.vue";
 
+const Courses = () => import("./components/Coursework.vue")
+const AddCourse = () => import("./components/AddCourse.vue");
+
 const Duties = () => import("./components/Duties.vue");
 const AddDuty = () => import("./components/AddDuty.vue");
 
@@ -403,6 +406,40 @@ const routes = [
     name: "addduty",
     meta: { requiresAuth: true },
     component: AddDuty,
+    beforeEnter: (to, from, next) => {
+      const user = JSON.parse(localStorage.getItem("user"));
+      if(!user){
+        next(
+          {
+            name: "login"
+          }
+        );
+      }
+      next();
+    }
+  },
+  {
+    path: "/educationCourses/:id",
+    name: "educationcourses",
+    meta: { requiresAuth: true },
+    component: Courses,
+    beforeEnter: (to, from, next) => {
+      const user = JSON.parse(localStorage.getItem("user"));
+      if(!user){
+        next(
+          {
+            name: "login"
+          }
+        );
+      }
+      next();
+    }
+  },
+  {
+    path: "/addCourse/:id",
+    name: "addcourse",
+    meta: { requiresAuth: true },
+    component: AddCourse,
     beforeEnter: (to, from, next) => {
       const user = JSON.parse(localStorage.getItem("user"));
       if(!user){

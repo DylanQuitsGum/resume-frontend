@@ -109,6 +109,9 @@
                     <v-icon small class="mr-2" @click="deleteEducation(item.id)"
                       >mdi-delete</v-icon
                     >
+                    <v-icon small class="mr-2" @click="listCourses(item.id)"
+                      >mdi-plus</v-icon
+                    >
                   </template>
                 </v-data-table>
 
@@ -469,6 +472,9 @@ const addEmployer = async () => {
 };
 const listJobDuties = async (id) => {
   router.push({ path: `jobDuties/${id}` });
+};
+const listCourses = async (id) => {
+  router.push({ path: `educationCourses/${id}` });
 };
 const removeAllEmployers = async () => {
   const user = JSON.parse(localStorage.getItem("user"));

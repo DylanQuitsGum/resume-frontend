@@ -58,6 +58,9 @@
                     <v-icon small class="mr-2" @click="deleteEmployer(item.id)"
                       >mdi-delete</v-icon
                     >
+                    <v-icon small class="mr-2" @click="addDuty(item.id)"
+                      >mdi-plus</v-icon
+                    >
                   </template>
                 </v-data-table>
 

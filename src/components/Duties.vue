@@ -67,6 +67,10 @@ const fetchData = async () => {
   }
 };
 
+const addDuty = async() => {
+  router.push({ path: `/addDuty/${employerId.value}` });
+};
+
 onMounted(() => {
   employerId.value = route.params.id;
   fetchData();

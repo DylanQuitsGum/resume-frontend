@@ -398,6 +398,23 @@ const routes = [
       next();
     }
   },
+  {
+    path: "/addDuty/:id",
+    name: "addduty",
+    meta: { requiresAuth: true },
+    component: AddDuty,
+    beforeEnter: (to, from, next) => {
+      const user = JSON.parse(localStorage.getItem("user"));
+      if(!user){
+        next(
+          {
+            name: "login"
+          }
+        );
+      }
+      next();
+    }
+  },
 ];
 
 const router = createRouter({

@@ -3,6 +3,7 @@ import Home from "./components/Home.vue";
 import Login from "./components/Login.vue";
 import Register from "./components/Register.vue";
 
+const Duties = () => import("./components/Duties.vue");
 const AddDuty = () => import("./components/AddDuty.vue");
 
 const Resumes = () => import("./components/Resumes.vue");
@@ -381,10 +382,10 @@ const routes = [
     }
   },
   {
-    path: "/addDuty/:id",
-    name: "addduty",
+    path: "/jobDuties/:id",
+    name: "jobduties",
     meta: { requiresAuth: true },
-    component: AddDuty,
+    component: Duties,
     beforeEnter: (to, from, next) => {
       const user = JSON.parse(localStorage.getItem("user"));
       if(!user){

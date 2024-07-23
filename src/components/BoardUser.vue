@@ -58,7 +58,7 @@
                     <v-icon small class="mr-2" @click="deleteEmployer(item.id)"
                       >mdi-delete</v-icon
                     >
-                    <v-icon small class="mr-2" @click="addDuty(item.id)"
+                    <v-icon small class="mr-2" @click="listJobDuties(item.id)"
                       >mdi-plus</v-icon
                     >
                   </template>
@@ -467,8 +467,8 @@ const fetchUserEmployers = async () => {
 const addEmployer = async () => {
   router.push({ path: "addEmployer" });
 };
-const addDuty = async (id) => {
-  router.push({ path: `addDuty/${id}` });
+const listJobDuties = async (id) => {
+  router.push({ path: `jobDuties/${id}` });
 };
 const removeAllEmployers = async () => {
   const user = JSON.parse(localStorage.getItem("user"));

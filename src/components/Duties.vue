@@ -81,6 +81,16 @@ const deleteDuty = async (id) => {
     });
 };
 
+const removeAllDuties = async() => {
+  DutyService.deleteAll(employerId.value)
+    .then((response) => {
+      fetchData();
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+};
+
 onMounted(() => {
   employerId.value = route.params.id;
   fetchData();

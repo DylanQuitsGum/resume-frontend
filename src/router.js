@@ -3,6 +3,14 @@ import Home from "./components/Home.vue";
 import Login from "./components/Login.vue";
 import Register from "./components/Register.vue";
 
+const Courses = () => import("./components/Coursework.vue")
+const AddCourse = () => import("./components/AddCourse.vue");
+const EditCourse = () => import("./components/EditCourse.vue");
+
+const Duties = () => import("./components/Duties.vue");
+const AddDuty = () => import("./components/AddDuty.vue");
+const EditDuty = () => import("./components/editDuty.vue");
+
 const Resumes = () => import("./components/Resumes.vue");
 const ResumeBuilder = () => import("./components/ResumeBuilder.vue");
 const EditResume = () => import("./components/EditResume.vue");
@@ -366,6 +374,108 @@ const routes = [
     name: "editResume",
     meta: { requiresAuth: true },
     component: EditResume,
+    beforeEnter: (to, from, next) => {
+      const user = JSON.parse(localStorage.getItem("user"));
+      if(!user){
+        next(
+          {
+            name: "login"
+          }
+        );
+      }
+      next();
+    }
+  },
+  {
+    path: "/jobDuties/:id",
+    name: "jobduties",
+    meta: { requiresAuth: true },
+    component: Duties,
+    beforeEnter: (to, from, next) => {
+      const user = JSON.parse(localStorage.getItem("user"));
+      if(!user){
+        next(
+          {
+            name: "login"
+          }
+        );
+      }
+      next();
+    }
+  },
+  {
+    path: "/addDuty/:id",
+    name: "addduty",
+    meta: { requiresAuth: true },
+    component: AddDuty,
+    beforeEnter: (to, from, next) => {
+      const user = JSON.parse(localStorage.getItem("user"));
+      if(!user){
+        next(
+          {
+            name: "login"
+          }
+        );
+      }
+      next();
+    }
+  },
+  {
+    path: "/educationCourses/:id",
+    name: "educationcourses",
+    meta: { requiresAuth: true },
+    component: Courses,
+    beforeEnter: (to, from, next) => {
+      const user = JSON.parse(localStorage.getItem("user"));
+      if(!user){
+        next(
+          {
+            name: "login"
+          }
+        );
+      }
+      next();
+    }
+  },
+  {
+    path: "/addCourse/:id",
+    name: "addcourse",
+    meta: { requiresAuth: true },
+    component: AddCourse,
+    beforeEnter: (to, from, next) => {
+      const user = JSON.parse(localStorage.getItem("user"));
+      if(!user){
+        next(
+          {
+            name: "login"
+          }
+        );
+      }
+      next();
+    }
+  },
+  {
+    path: "/editCourse/:id",
+    name: "editcourse",
+    meta: { requiresAuth: true },
+    component: EditCourse,
+    beforeEnter: (to, from, next) => {
+      const user = JSON.parse(localStorage.getItem("user"));
+      if(!user){
+        next(
+          {
+            name: "login"
+          }
+        );
+      }
+      next();
+    }
+  },
+  {
+    path: "/editDuty/:id",
+    name: "editduty",
+    meta: { requiresAuth: true },
+    component: EditDuty,
     beforeEnter: (to, from, next) => {
       const user = JSON.parse(localStorage.getItem("user"));
       if(!user){

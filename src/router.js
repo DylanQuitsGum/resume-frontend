@@ -9,6 +9,7 @@ const EditCourse = () => import("./components/EditCourse.vue");
 
 const Duties = () => import("./components/Duties.vue");
 const AddDuty = () => import("./components/AddDuty.vue");
+const EditDuty = () => import("./components/editDuty.vue");
 
 const Resumes = () => import("./components/Resumes.vue");
 const ResumeBuilder = () => import("./components/ResumeBuilder.vue");
@@ -458,6 +459,23 @@ const routes = [
     name: "editcourse",
     meta: { requiresAuth: true },
     component: EditCourse,
+    beforeEnter: (to, from, next) => {
+      const user = JSON.parse(localStorage.getItem("user"));
+      if(!user){
+        next(
+          {
+            name: "login"
+          }
+        );
+      }
+      next();
+    }
+  },
+  {
+    path: "/editDuty/:id",
+    name: "editduty",
+    meta: { requiresAuth: true },
+    component: EditDuty,
     beforeEnter: (to, from, next) => {
       const user = JSON.parse(localStorage.getItem("user"));
       if(!user){

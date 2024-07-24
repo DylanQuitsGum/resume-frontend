@@ -71,6 +71,10 @@ const addDuty = async() => {
   router.push({ path: `/addDuty/${employerId.value}` });
 };
 
+const editDuty = async (id) => {
+  router.push({ path: `/editDuty/${id}` });
+};
+
 const deleteDuty = async (id) => {
   DutyService.delete(employerId.value, id)
     .then(() => {

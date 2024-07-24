@@ -52,6 +52,7 @@
       courseTitle: course.value.courseTitle,
       educationId: educationId.value,
     };
+    console.log(data);
     CourseService.create(educationId.value, data)
       .then((response) => {
         course.value.id = response.data.id;

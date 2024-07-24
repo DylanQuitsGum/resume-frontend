@@ -79,6 +79,10 @@
         console.log(e);
       });
   };
+
+  const editCourse = async (id) => {
+  router.push({ path: `/editCourse/${id}` });
+};
   
   const removeAllCourses = async() => {
     CourseService.deleteAll(educationId.value)

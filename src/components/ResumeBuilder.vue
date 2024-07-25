@@ -370,24 +370,24 @@ function UserInfo() {
 }
 
 function ProfessionalSummary() {
-  if(objectiveStatement.value == undefined || objectiveStatement.value == ''){
-      var request = {
-    preamble: 'You are a resume writer',
-    prompt: `Write me an objective statement for an senior position in the ${jobDescription.value} industry.  Only give me the objective statement.`
-  };
+  if (objectiveStatement.value == undefined || objectiveStatement.value == '') {
+    var request = {
+      preamble: 'You are a resume writer',
+      prompt: `Write me an objective statement for an senior position in the ${jobDescription.value} industry.  Only give me the objective statement.`
+    };
 
-  AIService.getObjective(request)
-    .then((response) => {
-      const output = response.data.response;
-      console.log(output);      
-      objectiveStatement.value = output;
-      return;
-    });
-  }else{
+    AIService.getObjective(request)
+      .then((response) => {
+        const output = response.data.response;
+        console.log(output);
+        objectiveStatement.value = output;
+        return;
+      });
+  } else {
     return objectiveStatement.value;
   }
 
-  
+
 }
 
 //#region Education History
@@ -399,8 +399,13 @@ function EducationHistoryTemplate1() {
     educationHistory += `<bold>${item.institutionName},${item.city},${item.state}</bold>     ${item.beginDate} - ${item.degreeAwardedDate ? item.degreeAwardedDate : 'Projected'}<br>`;
     educationHistory += `${item.fieldOfStudy}<br>`;
     educationHistory += `${item.gpa}<br>`;
-    educationHistory += "<em>Need to add Awards</em><br>";
-    educationHistory += "<em>Need to add Coursework</em><br>";
+    if (item.courses.length > 0) {
+      educationHistory += "<ul>";
+      for (var ii = 0; ii < item.courses.length; ii++) {
+        educationHistory += `<li>${item.courses[ii].courseTitle}</li>`;
+      }
+      educationHistory += "</ul>";
+    }
     educationHistory += "<br>";
   }
 
@@ -414,9 +419,14 @@ function EducationHistoryTemplate2() {
     var item = userEducations.value[i];
     educationHistory += `<bold>${item.institutionName},${item.city},${item.state}</bold>     ${item.beginDate} - ${item.degreeAwardedDate ? item.degreeAwardedDate : 'Projected'}<br>`;
     educationHistory += `${item.fieldOfStudy}<br>`;
-    educationHistory += `<em>Need to add GPA</em><br>`;
-    educationHistory += "<em>Need to add Awards</em><br>";
-    educationHistory += "<em>Need to add Coursework</em><br>";
+    educationHistory += `${item.gpa}<br>`;
+    if (item.courses.length > 0) {
+      educationHistory += "<ul>";
+      for (var ii = 0; ii < item.courses.length; ii++) {
+        educationHistory += `<li>${item.courses[ii].courseTitle}</li>`;
+      }
+      educationHistory += "</ul>";
+    }
     educationHistory += "<br>";
   }
 
@@ -430,9 +440,14 @@ function EducationHistoryTemplate3() {
     var item = userEducations.value[i];
     educationHistory += `<bold>${item.institutionName},${item.city},${item.state}</bold>     ${item.beginDate} - ${item.degreeAwardedDate ? item.degreeAwardedDate : 'Projected'}<br>`;
     educationHistory += `${item.fieldOfStudy}<br>`;
-    educationHistory += `<em>Need to add GPA</em><br>`;
-    educationHistory += "<em>Need to add Awards</em><br>";
-    educationHistory += "<em>Need to add Coursework</em><br>";
+    educationHistory += `${item.gpa}<br>`;
+    if (item.courses.length > 0) {
+      educationHistory += "<ul>";
+      for (var ii = 0; ii < item.courses.length; ii++) {
+        educationHistory += `<li>${item.courses[ii].courseTitle}</li>`;
+      }
+      educationHistory += "</ul>";
+    }
     educationHistory += "<br>";
   }
 
@@ -446,9 +461,14 @@ function EducationHistoryTemplate4() {
     var item = userEducations.value[i];
     educationHistory += `<bold>${item.institutionName},${item.city},${item.state}</bold>     ${item.beginDate} - ${item.degreeAwardedDate ? item.degreeAwardedDate : 'Projected'}<br>`;
     educationHistory += `${item.fieldOfStudy}<br>`;
-    educationHistory += `<em>Need to add GPA</em><br>`;
-    educationHistory += "<em>Need to add Awards</em><br>";
-    educationHistory += "<em>Need to add Coursework</em><br>";
+    educationHistory += `${item.gpa}<br>`;
+    if (item.courses.length > 0) {
+      educationHistory += "<ul>";
+      for (var ii = 0; ii < item.courses.length; ii++) {
+        educationHistory += `<li>${item.courses[ii].courseTitle}</li>`;
+      }
+      educationHistory += "</ul>";
+    }
     educationHistory += "<br>";
   }
 
@@ -463,11 +483,13 @@ function ProfessionalHistory1() {
   for (let i = 0; i < userEmployments.value.length; i++) {
     var item = userEmployments.value[i];
     professionalHistory += `${item.employerName}, ${item.position}, ${item.city}, ${item.state}`;
-    professionalHistory += "<ul>";
-    for (let ii = 0; ii < 3; ii++) {
-      professionalHistory += `<li>Accomplished X, as measured by Y, by doing Z`;
+    if (item.duties.length > 0) {
+      professionalHistory += "<ul>";
+      for (let ii = 0; ii < item.duties.length; ii++) {
+        professionalHistory += `<li>${item.duties[ii].dutyText}</li>`;
+      }
+      professionalHistory += "</ul>";
     }
-    professionalHistory += "</ul>";
   }
 
   return professionalHistory;
@@ -576,11 +598,13 @@ function Skills4() {
 }
 
 // #endregion
+
 function sleep(time) {
-    return new Promise((resolve) => {
-        setTimeout(resolve, time || 1000);
-    });
+  return new Promise((resolve) => {
+    setTimeout(resolve, time || 1000);
+  });
 }
+
 // #region Build Templates
 const buildTemplate1 = async () => {
   var html = '';
@@ -589,8 +613,8 @@ const buildTemplate1 = async () => {
   html += "Professional Summary";
   html += "<hr>";
   var first = true;
-  while(objectiveStatement.value == undefined || objectiveStatement.value == ''){
-    if(first){
+  while (objectiveStatement.value == undefined || objectiveStatement.value == '') {
+    if (first) {
       ProfessionalSummary();
       first = false;
       await sleep(3000);
@@ -616,6 +640,14 @@ const buildTemplate2 = async () => {
   html += `${UserInfo()}<br><br>`;
   html += "Professional Summary";
   html += "<hr>";
+  var first = true;
+  while (objectiveStatement.value == undefined || objectiveStatement.value == '') {
+    if (first) {
+      ProfessionalSummary();
+      first = false;
+      await sleep(3000);
+    }
+  }
   html += `${ProfessionalSummary()}<br><br>`;
   html += "Education";
   html += "<hr>";
@@ -636,6 +668,14 @@ const buildTemplate3 = async () => {
   html += `${UserInfo()}<br><br>`;
   html += "Professional Summary";
   html += "<hr>";
+  var first = true;
+  while (objectiveStatement.value == undefined || objectiveStatement.value == '') {
+    if (first) {
+      ProfessionalSummary();
+      first = false;
+      await sleep(3000);
+    }
+  }
   html += `${ProfessionalSummary()}<br><br>`;
   html += "Education";
   html += "<hr>";
@@ -656,6 +696,14 @@ const buildTemplate4 = async () => {
   html += `${UserInfo()}<br><br>`;
   html += "Professional Summary";
   html += "<hr>";
+  var first = true;
+  while (objectiveStatement.value == undefined || objectiveStatement.value == '') {
+    if (first) {
+      ProfessionalSummary();
+      first = false;
+      await sleep(3000);
+    }
+  }
   html += `${ProfessionalSummary()}<br><br>`;
   html += "Education";
   html += "<hr>";

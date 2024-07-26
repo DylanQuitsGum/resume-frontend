@@ -10,11 +10,6 @@
                 :rules="[(v) => !!v || 'Job description is required']" label="Job Description" required>
               </v-text-field>
 
-              <div>
-                <v-text-field variant="outlined" v-model="objectiveStatement" label="Objective Statement" required>
-                </v-text-field>
-              </div>
-
             </v-form>
             <v-card-actions>
 
@@ -25,7 +20,8 @@
 
         <template v-slot:item.2>
           <v-card title="Select Education History" elevation="10">
-            <v-data-table-virtual :items="userEducations" disable-pagination :hide-default-footer="true">
+            <v-data-table-virtual :items="userEducations" :headers="educationHeaders" disable-pagination
+              :hide-default-footer="true">
               <template v-slot:['item.actions']="{ item }">
 
               </template>
@@ -40,7 +36,8 @@
 
         <template v-slot:item.3>
           <v-card title="Select Employment History" elevation="10">
-            <v-data-table-virtual :items="userEmployments" disable-pagination :hide-default-footer="true">
+            <v-data-table-virtual :items="userEmployments" :headers="employmentHeaders" disable-pagination
+              :hide-default-footer="true">
               <template v-slot:['item.actions']="{ item }">
 
               </template>
@@ -55,7 +52,8 @@
 
         <template v-slot:item.4>
           <v-card title="Select Skills" elevation="10">
-            <v-data-table-virtual :items="userSkills" disable-pagination :hide-default-footer="true">
+            <v-data-table-virtual :items="userSkills" :headers="skillHeaders" disable-pagination
+              :hide-default-footer="true">
               <template v-slot:['item.actions']="{ item }">
 
               </template>
@@ -70,7 +68,8 @@
 
         <template v-slot:item.5>
           <v-card title="Select Awards" elevation="10">
-            <v-data-table-virtual :items="userAwards" disable-pagination :hide-default-footer="true">
+            <v-data-table-virtual :items="userAwards" :headers="awardHeaders" disable-pagination
+              :hide-default-footer="true">
               <template v-slot:['item.actions']="{ item }">
 
               </template>
@@ -151,7 +150,6 @@
 
 <script setup>
 import { onMounted, ref, watch } from "vue";
-
 import { useRouter } from "vue-router";
 
 import EducationService from "@/services/education.service";
@@ -161,6 +159,8 @@ import AwardService from '@/services/award.service';
 import UserService from '@/services/user.service';
 import AIService from '@/services/ai.service';
 import ResumeService from '@/services/resume.service';
+import LinkService from '@/services/link.service';
+
 import jsPDF from 'jspdf';
 
 import {
@@ -191,7 +191,8 @@ const userInformation = ref({
   city: '',
   state: '',
   zipCode: '',
-  email: ''
+  email: '',
+  link: ''
 });
 const userEducations = ref([]);
 const userEmployments = ref([]);
@@ -204,13 +205,71 @@ const showEditResume = ref(false);
 const jobDescription = ref('Computer Scientist');
 const objectiveStatement = ref('');
 
+//#region Headers
+const employmentHeaders = ref([
+  {
+    title: "Employer",
+    align: "start",
+    sortable: false,
+    value: "employerName",
+  },
+  { title: "Position", value: "position", sortable: false },
+  { title: "Actions", value: "actions", sortable: false },
+]);
+const educationHeaders = ref([
+  {
+    title: "Institution",
+    align: "start",
+    sortable: false,
+    value: "institutionName",
+  },
+  { title: "Field", value: "fieldOfStudy", sortable: false },
+  { title: "Actions", value: "actions", sortable: false },
+]);
+const awardHeaders = ref([
+  {
+    title: "Name",
+    align: "start",
+    sortable: false,
+    value: "awardName",
+  },
+  { title: "Award Date", value: "dateAwarded", sortable: false },
+  { title: "Actions", value: "actions", sortable: false },
+]);
+const skillHeaders = ref([
+  {
+    title: "Name",
+    align: "start",
+    sortable: false,
+    value: "skillName",
+  },
+  { title: "Skill Level", value: "skillLevel", sortable: false },
+  { title: "Actions", value: "actions", sortable: false },
+]);
+const experienceHeaders = ref([
+  {
+    title: "Experience",
+    align: "start",
+    sortable: false,
+    value: "experienceText",
+  },
+  { title: "Actions", value: "actions", sortable: false },
+]);
+const linkHeaders = ref([
+  {
+    title: "Type",
+    align: "start",
+    sortable: false,
+    value: "linkType",
+  },
+  { title: "Link URL", value: "linkURL", sortable: false },
+  { title: "Actions", value: "actions", sortable: false },
+]);
+//#endregion
+
 watch(templateModel, async (newValue, oldValue) => {
   console.log(templateModel.value);
 });
-
-const buildEditor = async () => {
-
-};
 
 // #region Fetch Data
 
@@ -220,6 +279,7 @@ const fetchData = async () => {
   fetchUserSkills();
   fetchUserAwards();
   fetchUserInformation();
+  fetchLinkInformation();
 };
 
 const fetchUserEducations = async () => {
@@ -295,16 +355,35 @@ const fetchUserInformation = async () => {
     const res = await UserService.get(user.id);
     const { status, data } = res;
     if (status == 200) {
-      userInformation.value = {
-        firstName: data.firstName,
-        lastName: data.lastName,
-        street: data.street,
-        city: data.city,
-        state: data.state,
-        zipCode: data.zipCode,
-        email: data.email,
-        phoneNumber: data.phoneNumber
+      userInformation.value.firstName = data.firstName;
+      userInformation.value.lastName = data.lastName;
+      userInformation.value.street = data.street;
+      userInformation.value.city = data.city;
+      userInformation.value.state = data.state;
+      userInformation.value.zipCode = data.zipCode;
+      userInformation.value.email = data.email;
+      userInformation.value.phoneNumber = data.phoneNumber;
+    }
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+const fetchLinkInformation = async () => {
+  try {
+    const res = await LinkService.getAll(user.id);
+    const { status, data } = res;
+    if (status == 200) {
+      var links = data.map((c) => ({
+        ...c,
+        enabled: false,
+      }));
+      if (links.length > 0) {
+        var link = `${links[0].linkType}: ${links[0].linkURL}`;
+        console.log(link);
+        userInformation.value.link = link;
       }
+
     }
   } catch (err) {
     console.error(err);
@@ -366,7 +445,7 @@ function UserName() {
 }
 
 function UserInfo() {
-  return `${userInformation.value.city}, ${userInformation.value.state} | ${userInformation.value.phoneNumber} | ${userInformation.value.email} |`;
+  return `${userInformation.value.city}, ${userInformation.value.state} | ${userInformation.value.phoneNumber} | ${userInformation.value.email} | ${userInformation.value.link}`;
 }
 
 function ProfessionalSummary() {
@@ -396,7 +475,12 @@ function EducationHistoryTemplate1() {
 
   for (let i = 0; i < userEducations.value.length; i++) {
     var item = userEducations.value[i];
-    educationHistory += `<bold>${item.institutionName},${item.city},${item.state}</bold>     ${item.beginDate} - ${item.degreeAwardedDate ? item.degreeAwardedDate : 'Projected'}<br>`;
+    educationHistory += `<bold>${item.institutionName},${item.city},${item.state}</bold>`;
+    educationHistory += `${item.beginDate} - ${item.degreeAwardedDate}`;
+    if(Date.now < item.degreeAwardedDate){
+      educationHistory += " (Projected)";
+    }
+    educationHistory += "<br>";
     educationHistory += `${item.fieldOfStudy}<br>`;
     educationHistory += `${item.gpa}<br>`;
     if (item.courses.length > 0) {
@@ -722,7 +806,6 @@ const buildTemplate4 = async () => {
 
 onMounted(() => {
   fetchData();
-  buildEditor();
 });
 
 </script>

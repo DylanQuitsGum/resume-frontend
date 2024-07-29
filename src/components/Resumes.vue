@@ -13,6 +13,9 @@
         <v-icon small class="mr-2" @click="deleteResume(item.id)"
           >mdi-delete</v-icon
         >
+        <v-icon small class="mr-2" @click="exportResume(item)"
+          >mdi-export</v-icon
+        >
       </template>
     </v-data-table-virtual>
 
@@ -28,13 +31,14 @@
 import { onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import ResumeService from "@/services/resume.service";
+import dateFormat from 'dateformat';
 import jsPDF from "jspdf";
 
 const router = useRouter();
 
 const resumeHeaders = ref([
   {
-    text: "Resume Title",
+    title: "Resume Title",
     align: "start",
     sortable: false,
     value: "resumeTitle",
@@ -81,6 +85,22 @@ const deleteResume = async (id) => {
       console.log(e);
     });
 };
+
+const exportResume = async (resume) => {
+  const { resumeTitle, resumeText }  = resume;
+
+  var doc = new jsPDF();
+  doc.html(resumeText, {
+    callback: function (doc) {
+      var fileName = `${resumeTitle}.pdf`;
+      doc.save(fileName);
+    },
+    x: 15,
+    y: 15,
+    width: 170,
+    windowWidth: 670
+  })
+}
 
 const removeAllResumes = async () => {
   const user = JSON.parse(localStorage.getItem("user"));

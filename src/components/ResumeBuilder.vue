@@ -160,7 +160,7 @@ import UserService from '@/services/user.service';
 import AIService from '@/services/ai.service';
 import ResumeService from '@/services/resume.service';
 import LinkService from '@/services/link.service';
-
+import dateFormat from 'dateformat';
 import jsPDF from 'jspdf';
 
 import {
@@ -416,8 +416,9 @@ const cancelBuildResume = async () => {
 };
 
 const saveResume = async () => {
+  var date = dateFormat("ddmmmyy");
   var data = {
-    resumeTitle: 'Resume Title',
+    resumeTitle: `${jobDescription.value}_${date}`,
     jobDescription: jobDescription.value,
     resumeText: editor.value.getHTML(),
     userId: user.id
@@ -431,7 +432,11 @@ const createPDF = async () => {
   var doc = new jsPDF();
   doc.html(resumeText.value, {
     callback: function (doc) {
-      doc.save('Resume.pdf');
+      
+      var now = new Date();
+      var date = dateFormat(now, "ddmmmyy");
+      var fileName = `${jobDescription.value}_${date}_${templateModel.value}.pdf`;
+      doc.save(fileName);
     },
     x: 15,
     y: 15,

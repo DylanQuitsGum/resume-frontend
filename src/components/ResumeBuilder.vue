@@ -159,7 +159,6 @@ import AwardService from '@/services/award.service';
 import UserService from '@/services/user.service';
 import AIService from '@/services/ai.service';
 import ResumeService from '@/services/resume.service';
-import LinkService from '@/services/link.service';
 import dateFormat from 'dateformat';
 import jsPDF from 'jspdf';
 
@@ -255,16 +254,6 @@ const experienceHeaders = ref([
   },
   { title: "Actions", value: "actions", sortable: false },
 ]);
-const linkHeaders = ref([
-  {
-    title: "Type",
-    align: "start",
-    sortable: false,
-    value: "linkType",
-  },
-  { title: "Link URL", value: "linkURL", sortable: false },
-  { title: "Actions", value: "actions", sortable: false },
-]);
 //#endregion
 
 watch(templateModel, async (newValue, oldValue) => {
@@ -279,7 +268,6 @@ const fetchData = async () => {
   fetchUserSkills();
   fetchUserAwards();
   fetchUserInformation();
-  fetchLinkInformation();
 };
 
 const fetchUserEducations = async () => {
@@ -363,27 +351,7 @@ const fetchUserInformation = async () => {
       userInformation.value.zipCode = data.zipCode;
       userInformation.value.email = data.email;
       userInformation.value.phoneNumber = data.phoneNumber;
-    }
-  } catch (err) {
-    console.error(err);
-  }
-};
-
-const fetchLinkInformation = async () => {
-  try {
-    const res = await LinkService.getAll(user.id);
-    const { status, data } = res;
-    if (status == 200) {
-      var links = data.map((c) => ({
-        ...c,
-        enabled: false,
-      }));
-      if (links.length > 0) {
-        var link = `${links[0].linkType}: ${links[0].linkURL}`;
-        console.log(link);
-        userInformation.value.link = link;
-      }
-
+      userInformation.value.link = `${data.linkType}: ${data.linkURL}`;
     }
   } catch (err) {
     console.error(err);
@@ -506,7 +474,15 @@ function EducationHistoryTemplate2() {
 
   for (let i = 0; i < userEducations.value.length; i++) {
     var item = userEducations.value[i];
-    educationHistory += `<bold>${item.institutionName},${item.city},${item.state}</bold>     ${item.beginDate} - ${item.degreeAwardedDate ? item.degreeAwardedDate : 'Projected'}<br>`;
+    var startDate = dateFormat(item.beginDate,"mmmm yyyy");
+    var endDate = dateFormat(item.degreeAwardDate,"mmmm yyyy");
+    if(item.degreeAwardDate != undefined ){
+      endDate = dateFormat(item.degreeAwardDate, "mmmm yyyy");
+      if(Date.now < item.degreeAwardDate){
+        endDate += " (Projected)";
+      }
+    }
+    educationHistory += `<bold>${item.institutionName},${item.city},${item.state}</bold>     ${startDate} - ${endDate}<br>`;
     educationHistory += `${item.fieldOfStudy}<br>`;
     educationHistory += `${item.gpa}<br>`;
     if (item.courses.length > 0) {
@@ -589,7 +565,12 @@ function ProfessionalHistory2() {
 
   for (let i = 0; i < userEmployments.value.length; i++) {
     var item = userEmployments.value[i];
-    professionalHistory += `${item.employerName}, ${item.position}, ${item.city}, ${item.state}`;
+    var startDate = dateFormat(item.beginDate,"mm/yyyy");
+    var endDate = 'Present';
+    if(item.endDate != undefined){
+      endDate = dateFormat(item.endDate,"mm/yyyy");
+    }
+    professionalHistory += `${item.position}, ${item.employerName} | ${startDate} - ${endDate}`;
     professionalHistory += "<ul>";
     for (let ii = 0; ii < 3; ii++) {
       professionalHistory += `<li>Accomplished X, as measured by Y, by doing Z`;
@@ -635,19 +616,6 @@ function ProfessionalHistory4() {
 
 // #region Skills
 function Skills1() {
-  var skills = '';
-
-  skills += "<ul>";
-  for (let i = 0; i < userSkills.value.length; i++) {
-    var item = userSkills.value[i];
-    skills += `<li>${item.skillName}: ${item.skillLevel}`;
-  }
-  skills += "</ul>";
-
-  return skills;
-}
-
-function Skills2() {
   var skills = '';
 
   skills += "<ul>";
@@ -728,7 +696,7 @@ const buildTemplate2 = async () => {
   html += `<span{align=center}><bold>${UserName()}</bold></span><br>`;
   html += `${UserInfo()}<br><br>`;
   html += "Professional Summary";
-  html += "<hr>";
+  html += "<br>";
   var first = true;
   while (objectiveStatement.value == undefined || objectiveStatement.value == '') {
     if (first) {
@@ -739,14 +707,11 @@ const buildTemplate2 = async () => {
   }
   html += `${ProfessionalSummary()}<br><br>`;
   html += "Education";
-  html += "<hr>";
+  html += "<br>";
   html += `${EducationHistoryTemplate2()}`;
-  html += "Professional Experience";
-  html += "<hr>";
+  html += "Experience";
+  html += "<br>";
   html += `${ProfessionalHistory2()}`;
-  html += "Skills | Leadership Skills | Activities | Extracurricular Activies";
-  html += "<hr>";
-  html += `${Skills2()}`;
   resumeText.value = html;
   editor.value.commands.setContent(html);
 };

@@ -20,7 +20,13 @@
 
         <template v-slot:item.2>
           <v-card title="Select Education History" elevation="10">
-            <v-data-table-virtual :items="userEducations" :headers="educationHeaders" disable-pagination
+            <v-data-table-virtual :items="userEducations" 
+                                  :headers="educationHeaders" 
+                                  item-value="item"
+                                  show-select
+                                  return-object
+                                  v-model="selectedEducations"
+                                  disable-pagination
               :hide-default-footer="true">
               <template v-slot:['item.actions']="{ item }">
 
@@ -36,7 +42,13 @@
 
         <template v-slot:item.3>
           <v-card title="Select Employment History" elevation="10">
-            <v-data-table-virtual :items="userEmployments" :headers="employmentHeaders" disable-pagination
+            <v-data-table-virtual :items="userEmployments" 
+                                  :headers="employmentHeaders" 
+                                  item-value="item"
+                                  show-select
+                                  return-object
+                                  v-model="selectedEmployments"
+                                  disable-pagination
               :hide-default-footer="true">
               <template v-slot:['item.actions']="{ item }">
 
@@ -52,7 +64,13 @@
 
         <template v-slot:item.4>
           <v-card title="Select Skills" elevation="10">
-            <v-data-table-virtual :items="userSkills" :headers="skillHeaders" disable-pagination
+            <v-data-table-virtual :items="userSkills" 
+                                  :headers="skillHeaders" 
+                                  item-value="item"
+                                  show-select
+                                  return-object
+                                  v-model="selectedSkills"
+                                  disable-pagination
               :hide-default-footer="true">
               <template v-slot:['item.actions']="{ item }">
 
@@ -68,7 +86,13 @@
 
         <template v-slot:item.5>
           <v-card title="Select Awards" elevation="10">
-            <v-data-table-virtual :items="userAwards" :headers="awardHeaders" disable-pagination
+            <v-data-table-virtual :items="userAwards" 
+                                  :headers="awardHeaders" 
+                                  item-value="item"
+                                  show-select
+                                  return-object
+                                  v-model="selectedAwards"
+                                  disable-pagination
               :hide-default-footer="true">
               <template v-slot:['item.actions']="{ item }">
 
@@ -194,9 +218,17 @@ const userInformation = ref({
   link: ''
 });
 const userEducations = ref([]);
+const selectedEducations = ref([]);
+
 const userEmployments = ref([]);
+const selectedEmployments = ref([]);
+
 const userSkills = ref([]);
+const selectedSkills = ref([]);
+
 const userAwards = ref([]);
+const selectedAwards = ref([]);
+
 const templateModel = ref('');
 
 const showEditResume = ref(false);
@@ -213,7 +245,6 @@ const employmentHeaders = ref([
     value: "employerName",
   },
   { title: "Position", value: "position", sortable: false },
-  { title: "Actions", value: "actions", sortable: false },
 ]);
 const educationHeaders = ref([
   {
@@ -223,7 +254,6 @@ const educationHeaders = ref([
     value: "institutionName",
   },
   { title: "Field", value: "fieldOfStudy", sortable: false },
-  { title: "Actions", value: "actions", sortable: false },
 ]);
 const awardHeaders = ref([
   {
@@ -233,7 +263,6 @@ const awardHeaders = ref([
     value: "awardName",
   },
   { title: "Award Date", value: "dateAwarded", sortable: false },
-  { title: "Actions", value: "actions", sortable: false },
 ]);
 const skillHeaders = ref([
   {
@@ -243,7 +272,6 @@ const skillHeaders = ref([
     value: "skillName",
   },
   { title: "Skill Level", value: "skillLevel", sortable: false },
-  { title: "Actions", value: "actions", sortable: false },
 ]);
 const experienceHeaders = ref([
   {
@@ -252,7 +280,6 @@ const experienceHeaders = ref([
     sortable: false,
     value: "experienceText",
   },
-  { title: "Actions", value: "actions", sortable: false },
 ]);
 //#endregion
 
@@ -445,9 +472,8 @@ function ProfessionalSummary() {
 //#region Education History
 function EducationHistoryTemplate1() {
   var educationHistory = '';
-
-  for (let i = 0; i < userEducations.value.length; i++) {
-    var item = userEducations.value[i];
+  for (let i = 0; i < selectedEducations.value.length; i++) {
+    var item = selectedEducations.value[i];
     educationHistory += `<bold>${item.institutionName},${item.city},${item.state}</bold>`;
     educationHistory += `${item.beginDate} - ${item.degreeAwardedDate}`;
     if(Date.now < item.degreeAwardedDate){
@@ -472,8 +498,8 @@ function EducationHistoryTemplate1() {
 function EducationHistoryTemplate2() {
   var educationHistory = '';
 
-  for (let i = 0; i < userEducations.value.length; i++) {
-    var item = userEducations.value[i];
+  for (let i = 0; i < selectedEducations.value.length; i++) {
+    var item = selectedEducations.value[i];
     var startDate = dateFormat(item.beginDate,"mmmm yyyy");
     var endDate = dateFormat(item.degreeAwardDate,"mmmm yyyy");
     if(item.degreeAwardDate != undefined ){
@@ -501,8 +527,8 @@ function EducationHistoryTemplate2() {
 function EducationHistoryTemplate3() {
   var educationHistory = '';
 
-  for (let i = 0; i < userEducations.value.length; i++) {
-    var item = userEducations.value[i];
+  for (let i = 0; i < selectedEducations.value.length; i++) {
+    var item = selectedEducations.value[i];
     var startDate = dateFormat(item.beginDate,"mmmm yyyy");
     var endDate = dateFormat(item.degreeAwardDate,"mmmm yyyy");
     if(item.degreeAwardDate != undefined ){
@@ -530,8 +556,8 @@ function EducationHistoryTemplate3() {
 function EducationHistoryTemplate4() {
   var educationHistory = '';
 
-  for (let i = 0; i < userEducations.value.length; i++) {
-    var item = userEducations.value[i];
+  for (let i = 0; i < selectedEducations.value.length; i++) {
+    var item = selectedEducations.value[i];
     educationHistory += `<bold>${item.institutionName},${item.city},${item.state}</bold>     ${item.beginDate} - ${item.degreeAwardedDate ? item.degreeAwardedDate : 'Projected'}<br>`;
     educationHistory += `${item.fieldOfStudy}<br>`;
     educationHistory += `${item.gpa}<br>`;
@@ -553,8 +579,8 @@ function EducationHistoryTemplate4() {
 function ProfessionalHistory1() {
   var professionalHistory = '';
 
-  for (let i = 0; i < userEmployments.value.length; i++) {
-    var item = userEmployments.value[i];
+  for (let i = 0; i < selectedEmployments.value.length; i++) {
+    var item = selectedEmployments.value[i];
     professionalHistory += `${item.employerName}, ${item.position}, ${item.city}, ${item.state}`;
     if (item.duties.length > 0) {
       professionalHistory += "<ul>";
@@ -571,8 +597,8 @@ function ProfessionalHistory1() {
 function ProfessionalHistory2() {
   var professionalHistory = '';
 
-  for (let i = 0; i < userEmployments.value.length; i++) {
-    var item = userEmployments.value[i];
+  for (let i = 0; i < selectedEmployments.value.length; i++) {
+    var item = selectedEmployments.value[i];
     var startDate = dateFormat(item.beginDate,"mm/yyyy");
     var endDate = 'Present';
     if(item.endDate != undefined){
@@ -592,8 +618,8 @@ function ProfessionalHistory2() {
 function ProfessionalHistory3() {
   var professionalHistory = '';
 
-  for (let i = 0; i < userEmployments.value.length; i++) {
-    var item = userEmployments.value[i];
+  for (let i = 0; i < selectedEmployments.value.length; i++) {
+    var item = selectedEmployments.value[i];
     professionalHistory += `${item.employerName}, ${item.city}, ${item.state} <br>${item.position}`;
     professionalHistory += "<ul>";
     for (let ii = 0; ii < 3; ii++) {
@@ -608,8 +634,8 @@ function ProfessionalHistory3() {
 function ProfessionalHistory4() {
   var professionalHistory = '';
 
-  for (let i = 0; i < userEmployments.value.length; i++) {
-    var item = userEmployments.value[i];
+  for (let i = 0; i < selectedEmployments.value.length; i++) {
+    var item = selectedEmployments.value[i];
     professionalHistory += `${item.employerName}, ${item.position}, ${item.city}, ${item.state}`;
     professionalHistory += "<ul>";
     for (let ii = 0; ii < 3; ii++) {
@@ -627,8 +653,8 @@ function Skills1() {
   var skills = '';
 
   skills += "<ul>";
-  for (let i = 0; i < userSkills.value.length; i++) {
-    var item = userSkills.value[i];
+  for (let i = 0; i < selectedSkills.value.length; i++) {
+    var item = selectedSkills.value[i];
     skills += `<li>${item.skillName}: ${item.skillLevel}`;
   }
   skills += "</ul>";
@@ -639,8 +665,8 @@ function Skills1() {
 function Skills3() {
   var skills = '';
 
-  for (let i = 0; i < userSkills.value.length; i++) {
-    var item = userSkills.value[i];
+  for (let i = 0; i < selectedSkills.value.length; i++) {
+    var item = selectedSkills.value[i];
     if(i == 0){
       skills += `${item.skillName}: ${item.skillLevel}`;
     }else{
@@ -656,8 +682,8 @@ function Skills4() {
   var skills = '';
 
   skills += "<ul>";
-  for (let i = 0; i < userSkills.value.length; i++) {
-    var item = userSkills.value[i];
+  for (let i = 0; i < selectedSkills.value.length; i++) {
+    var item = selectedSkills.value[i];
     skills += `<li>${item.skillName}: ${item.skillLevel}`;
   }
   skills += "</ul>";

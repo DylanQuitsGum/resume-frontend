@@ -145,7 +145,11 @@ const updateProfile = async () => {
   UserService.update(currentUser.value.id, currentUser.value)
     .then((response) => {
       if(userLink.value.id == null){
-        
+        if(userLink.value.linkType != undefined && userLink.value.linkURL != undefined ){
+          LinkService.create(user.id,userLink.value)
+        }
+      }else{
+        LinkService.update(user.id,userLink.value.id,userLink.value);
       }
       message.value = "The profile was updated successfully!";
       router.push({ path: "/user" });

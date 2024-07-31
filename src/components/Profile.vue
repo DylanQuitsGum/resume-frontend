@@ -61,7 +61,7 @@
 
       <v-text-field
         variant="outlined"
-        v-model="userLink.linkType"
+        v-model="currentUser.linkType"
         :rules="[(v) => !!v || 'Link type is required']"
         label="Link Type"
         required
@@ -69,7 +69,7 @@
 
       <v-text-field
         variant="outlined"
-        v-model="userLink.linkURL"
+        v-model="currentUser.linkURL"
         :rules="[(v) => !!v || 'Link URL is required']"
         label="Link URL"
         required
@@ -93,22 +93,14 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import UserService from "../services/user.service";
-import LinkService from "../services/link.service";
 import router from "../router";
 
 const user = JSON.parse(localStorage.getItem("user"));
 const currentUser = ref();
 const message = ref("");
-const userLinks = ref([]);
-const userLink = ref({
-  id: null,
-  linkType: "",
-  linkURL: ""
-});
 
 const fetchData = async () => {
   fetchUserProfile();
-  fetchUserLinks();
 };
 
 const fetchUserProfile = async () => {
@@ -122,35 +114,9 @@ const fetchUserProfile = async () => {
     });
 };
 
-const fetchUserLinks = async() => {
-  try {
-      const res = await LinkService.getAll(user.id);
-      const { status, data } = res;
-  
-      if (status == 200) {
-        userLinks.value = data.map((c) => ({
-          ...c,
-          enabled: false,
-        }));
-        if(userLinks.value.length > 0){
-          userLink.value = userLinks.value[0];
-        }
-      }
-    } catch (err) {
-      console.error(err);
-    }
-}
-
 const updateProfile = async () => {
   UserService.update(currentUser.value.id, currentUser.value)
     .then((response) => {
-      if(userLink.value.id == null){
-        if(userLink.value.linkType != undefined && userLink.value.linkURL != undefined ){
-          LinkService.create(user.id,userLink.value)
-        }
-      }else{
-        LinkService.update(user.id,userLink.value.id,userLink.value);
-      }
       message.value = "The profile was updated successfully!";
       router.push({ path: "/user" });
     })

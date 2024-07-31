@@ -72,6 +72,22 @@
           ></v-text-field>
 
           <v-text-field
+            v-model="user.linkType"
+            label="Link Type"
+            variant="outlined"
+            :rules="linkTypeRules"
+            required
+          ></v-text-field>
+
+          <v-text-field
+            v-model="user.linkURL"
+            label="Link URL"
+            variant="outlined"
+            :rules="linkURLRules"
+            required
+          ></v-text-field>
+
+          <v-text-field
             v-model="user.password"
             label="Password"
             variant="outlined"
@@ -104,6 +120,14 @@ import authService from "@/services/auth.service";
 const router = useRouter();
 const errorMessage = ref("");
 
+const linkTypeRules = [
+  (v) => !!v || "Link Type is required",
+];
+
+const linkURLRules = [
+  (v) => !!v || "Link URL is required",
+];
+
 const emailRules = [
   (v) => !!v || "E-mail is required",
   (v) =>
@@ -132,6 +156,8 @@ const user = ref({
   state: "OK",
   zipCode: "73170",
   phoneNumber: "(405) 863-6222",
+  linkType: "GitHub",
+  linkURL: "https://github.com/DylanQuitsGum",
   password: "P#ssw0rd",
 });
 

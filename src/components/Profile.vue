@@ -59,6 +59,22 @@
         required
       ></v-text-field>
 
+      <v-text-field
+        variant="outlined"
+        v-model="currentUser.linkType"
+        :rules="[(v) => !!v || 'Link type is required']"
+        label="Link Type"
+        required
+      ></v-text-field>
+
+      <v-text-field
+        variant="outlined"
+        v-model="currentUser.linkURL"
+        :rules="[(v) => !!v || 'Link URL is required']"
+        label="Link URL"
+        required
+      ></v-text-field>
+
       <v-divider class="my-5"></v-divider>
       <div class="d-flex flex-wrap ga-3">
         <v-btn color="success" small @click="updateProfile"> Update </v-btn>
@@ -117,56 +133,6 @@ onMounted(() => {
   fetchData();
 });
 </script>
-
-<!-- <script>
-import UserService from "../services/user.service";
-import router from "../router";
-
-export default {
-  name: "profile",
-  data() {
-    return {
-      currentUser: null,
-      message: "",
-    };
-  },
-  async mounted() {
-    this.getProfile();
-  },
-  methods: {
-    getProfile() {
-      const user = JSON.parse(localStorage.getItem("user"));
-      UserService.get(user.id)
-        .then((response) => {
-          console.log(response);
-          this.currentUser = response.data;
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
-
-    updateProfile() {
-      const user = JSON.parse(localStorage.getItem("user"));
-      UserService.update(
-        this.currentUser.id,
-        this.currentUser
-      )
-        .then((response) => {
-          this.message = "The profile was updated successfully!";
-          router.push({ path: "/user"});
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
-
-    cancelEdit(){
-      router.push({ path: "/user"});
-    }
-  },
-};
-</script> -->
 
 <style>
 .edit-form {

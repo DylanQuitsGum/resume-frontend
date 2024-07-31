@@ -503,7 +503,15 @@ function EducationHistoryTemplate3() {
 
   for (let i = 0; i < userEducations.value.length; i++) {
     var item = userEducations.value[i];
-    educationHistory += `<bold>${item.institutionName},${item.city},${item.state}</bold>     ${item.beginDate} - ${item.degreeAwardedDate ? item.degreeAwardedDate : 'Projected'}<br>`;
+    var startDate = dateFormat(item.beginDate,"mmmm yyyy");
+    var endDate = dateFormat(item.degreeAwardDate,"mmmm yyyy");
+    if(item.degreeAwardDate != undefined ){
+      endDate = dateFormat(item.degreeAwardDate, "mmmm yyyy");
+      if(Date.now < item.degreeAwardDate){
+        endDate += " (Projected)";
+      }
+    }
+    educationHistory += `<bold>${item.institutionName},${item.city},${item.state}</bold>     ${startDate} - ${endDate}<br>`;
     educationHistory += `${item.fieldOfStudy}<br>`;
     educationHistory += `${item.gpa}<br>`;
     if (item.courses.length > 0) {
@@ -586,7 +594,7 @@ function ProfessionalHistory3() {
 
   for (let i = 0; i < userEmployments.value.length; i++) {
     var item = userEmployments.value[i];
-    professionalHistory += `${item.employerName}, ${item.position}, ${item.city}, ${item.state}`;
+    professionalHistory += `${item.employerName}, ${item.city}, ${item.state} <br>${item.position}`;
     professionalHistory += "<ul>";
     for (let ii = 0; ii < 3; ii++) {
       professionalHistory += `<li>Accomplished X, as measured by Y, by doing Z`;
@@ -631,12 +639,15 @@ function Skills1() {
 function Skills3() {
   var skills = '';
 
-  skills += "<ul>";
   for (let i = 0; i < userSkills.value.length; i++) {
     var item = userSkills.value[i];
-    skills += `<li>${item.skillName}: ${item.skillLevel}`;
+    if(i == 0){
+      skills += `${item.skillName}: ${item.skillLevel}`;
+    }else{
+      skills += ` | ${item.skillName}: ${item.skillLevel}`;
+    }
+    
   }
-  skills += "</ul>";
 
   return skills;
 }
@@ -720,7 +731,6 @@ const buildTemplate3 = async () => {
   var html = '';
   html += `<span{align=center}><bold>${UserName()}</bold></span><br>`;
   html += `${UserInfo()}<br><br>`;
-  html += "Professional Summary";
   html += "<hr>";
   var first = true;
   while (objectiveStatement.value == undefined || objectiveStatement.value == '') {
@@ -734,10 +744,10 @@ const buildTemplate3 = async () => {
   html += "Education";
   html += "<hr>";
   html += `${EducationHistoryTemplate3()}`;
-  html += "Professional Experience";
+  html += "Experience";
   html += "<hr>";
   html += `${ProfessionalHistory3()}`;
-  html += "Skills | Leadership Skills | Activities | Extracurricular Activies";
+  html += "Skills";
   html += "<hr>";
   html += `${Skills3()}`;
   resumeText.value = html;

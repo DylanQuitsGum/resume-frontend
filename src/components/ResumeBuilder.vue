@@ -259,7 +259,7 @@ const templateModel = ref('');
 
 const showEditResume = ref(false);
 
-const jobDescription = ref('Computer Scientist');
+const jobDescription = ref('');
 const objectiveStatement = ref('');
 
 //#region Headers
@@ -521,7 +521,7 @@ function EducationHistoryTemplate1() {
   var educationHistory = '';
   for (let i = 0; i < selectedEducations.value.length; i++) {
     var item = selectedEducations.value[i];
-    educationHistory += `<bold>${item.institutionName},${item.city},${item.state}</bold>`;
+    educationHistory += `<bold>${item.institutionName}, ${item.city}, ${item.state} </bold>`;
     educationHistory += `${item.beginDate} - ${item.degreeAwardedDate}`;
     if(Date.now < item.degreeAwardedDate){
       educationHistory += " (Projected)";
@@ -549,7 +549,7 @@ function EducationHistoryTemplate2() {
     var item = selectedEducations.value[i];
     var startDate = dateFormat(item.beginDate,"mmmm yyyy");
     var endDate = dateFormat(item.degreeAwardDate,"mmmm yyyy");
-    if(item.degreeAwardDate != undefined ){
+    if(item.degreeAwardDate != '0000-00-00'){
       endDate = dateFormat(item.degreeAwardDate, "mmmm yyyy");
       if(Date.now < item.degreeAwardDate){
         endDate += " (Projected)";
@@ -578,7 +578,7 @@ function EducationHistoryTemplate3() {
     var item = selectedEducations.value[i];
     var startDate = dateFormat(item.beginDate,"mmmm yyyy");
     var endDate = dateFormat(item.degreeAwardDate,"mmmm yyyy");
-    if(item.degreeAwardDate != undefined ){
+    if(item.degreeAwardDate != '0000-00-00'){
       endDate = dateFormat(item.degreeAwardDate, "mmmm yyyy");
       if(Date.now < item.degreeAwardDate){
         endDate += " (Projected)";
@@ -628,7 +628,38 @@ function ProfessionalHistory1() {
 
   for (let i = 0; i < selectedEmployments.value.length; i++) {
     var item = selectedEmployments.value[i];
-    professionalHistory += `${item.employerName}, ${item.position}, ${item.city}, ${item.state}`;
+    var startDate = dateFormat(item.beginDate,"mm/yyyy");
+    var endDate = 'Present';
+    if(item.endDate != '0000-00-00'){
+      endDate = dateFormat(item.endDate,"mm/yyyy");
+    }
+    professionalHistory += `${item.employerName}, ${item.position}, ${item.city}, ${item.state} | ${startDate} - ${endDate}`;
+    if (item.duties.length > 0) {
+      professionalHistory += "<ul>";
+      for (let ii = 0; ii < item.duties.length; ii++) {
+        professionalHistory += `<li>${item.duties[ii].dutyText}</li>`;
+      }
+      professionalHistory += "</ul>";
+      professionalHistory += "<br>";
+    }
+  }
+
+    professionalHistory += "<br>";
+  
+  return professionalHistory;
+}
+
+function ProfessionalHistory2() {
+  var professionalHistory = '';
+
+  for (let i = 0; i < selectedEmployments.value.length; i++) {
+    var item = selectedEmployments.value[i];
+    var startDate = dateFormat(item.beginDate,"mm/yyyy");
+    var endDate = 'Present';
+    if(item.endDate != '0000-00-00'){
+      endDate = dateFormat(item.endDate,"mm/yyyy");
+    }
+    professionalHistory += `${item.position}, ${item.employerName} | ${startDate} - ${endDate}`;
     if (item.duties.length > 0) {
       professionalHistory += "<ul>";
       for (let ii = 0; ii < item.duties.length; ii++) {
@@ -641,38 +672,19 @@ function ProfessionalHistory1() {
   return professionalHistory;
 }
 
-function ProfessionalHistory2() {
-  var professionalHistory = '';
-
-  for (let i = 0; i < selectedEmployments.value.length; i++) {
-    var item = selectedEmployments.value[i];
-    var startDate = dateFormat(item.beginDate,"mm/yyyy");
-    var endDate = 'Present';
-    if(item.endDate != undefined){
-      endDate = dateFormat(item.endDate,"mm/yyyy");
-    }
-    professionalHistory += `${item.position}, ${item.employerName} | ${startDate} - ${endDate}`;
-    professionalHistory += "<ul>";
-    for (let ii = 0; ii < 3; ii++) {
-      professionalHistory += `<li>Accomplished X, as measured by Y, by doing Z`;
-    }
-    professionalHistory += "</ul>";
-  }
-
-  return professionalHistory;
-}
-
 function ProfessionalHistory3() {
   var professionalHistory = '';
 
   for (let i = 0; i < selectedEmployments.value.length; i++) {
     var item = selectedEmployments.value[i];
     professionalHistory += `${item.employerName}, ${item.city}, ${item.state} <br>${item.position}`;
-    professionalHistory += "<ul>";
-    for (let ii = 0; ii < 3; ii++) {
-      professionalHistory += `<li>Accomplished X, as measured by Y, by doing Z`;
+    if (item.duties.length > 0) {
+      professionalHistory += "<ul>";
+      for (let ii = 0; ii < item.duties.length; ii++) {
+        professionalHistory += `<li>${item.duties[ii].dutyText}</li>`;
+      }
+      professionalHistory += "</ul>";
     }
-    professionalHistory += "</ul>";
   }
 
   return professionalHistory;
@@ -684,11 +696,13 @@ function ProfessionalHistory4() {
   for (let i = 0; i < selectedEmployments.value.length; i++) {
     var item = selectedEmployments.value[i];
     professionalHistory += `${item.employerName}, ${item.position}, ${item.city}, ${item.state}`;
-    professionalHistory += "<ul>";
-    for (let ii = 0; ii < 3; ii++) {
-      professionalHistory += `<li>Accomplished X, as measured by Y, by doing Z`;
+    if (item.duties.length > 0) {
+      professionalHistory += "<ul>";
+      for (let ii = 0; ii < item.duties.length; ii++) {
+        professionalHistory += `<li>${item.duties[ii].dutyText}</li>`;
+      }
+      professionalHistory += "</ul>";
     }
-    professionalHistory += "</ul>";
   }
 
   return professionalHistory;
@@ -833,6 +847,7 @@ const buildTemplate1 = async () => {
   html += "Professional Experience";
   html += "<hr>";
   html += `${ProfessionalHistory1()}`;
+  html += "<hr>";
   html += "Skills | Leadership Skills | Activities | Extracurricular Activies";
   html += "<hr>";
   html += `${Skills1()}`;

@@ -61,7 +61,7 @@
 
         <v-text-field
         variant="outlined"
-        v-model="currentEducation.gpa"
+        v-model="education.gpa"
         label="GPA"
         required
       ></v-text-field>
@@ -105,15 +105,15 @@ const submitted = ref(false);
 
 const education = ref({
   educationId: null,
-  institutionName: "UCO",
-  street: "123 I Can Dr.",
-  city: "Edmond",
-  state: "OK",
-  zipCode: "90210",
-  beginDate: "2001-01-01",
-  degreeAwardDate: "2004-12-13",
-  gpa: 3.8,
-  fieldOfStudy: "CS",
+  institutionName: "",
+  street: "",
+  city: "",
+  state: "",
+  zipCode: "",
+  beginDate: "",
+  degreeAwardDate: "",
+  gpa: 0,
+  fieldOfStudy: "",
 });
 
 const saveEducation = async () => {

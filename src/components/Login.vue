@@ -48,14 +48,14 @@ import router from "../router";
 const errorMessage = ref("");
 
 const user = ref({
-  firstName: "Greg",
-  lastName: "Satterlee",
-  email: "greg.satterlee@gmail.com",
-  street: "13801 S Independence Ave",
-  city: "Oklahoma City",
-  state: "OK",
-  zipCode: "73170",
-  password: "P#ssw0rd",
+  firstName: "",
+  lastName: "",
+  email: "",
+  street: "",
+  city: "",
+  state: "",
+  zipCode: "",
+  password: "",
 });
 
 async function signin() {

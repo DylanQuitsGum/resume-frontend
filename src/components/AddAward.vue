@@ -42,15 +42,17 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import AwardService from "@/services/award.service";
-import router from "../router";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const user = ref(JSON.parse(localStorage.getItem("user")));
 const submitted = ref(false);
 
 const award = ref({
   awardId: null,
-  awardName: "Award Name",
-  dateAwarded: "2001-01-01",
+  awardName: "",
+  dateAwarded: "",
 });
 
 const saveAward = async () => {

@@ -42,15 +42,17 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import SkillService from "@/services/skill.service";
-import router from "../router";
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const user = ref(JSON.parse(localStorage.getItem("user")));
 const submitted = ref(false);
 
 const skill = ref({
   skillId: null,
-  skillName: "Skill Name",
-  skillLevel: 5,
+  skillName: "",
+  skillLevel: 0,
 });
 
 const saveSkill = async () => {

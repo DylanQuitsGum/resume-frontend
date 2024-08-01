@@ -63,7 +63,6 @@
         <v-text-field
           variant="outlined"
           v-model="employer.endDate"
-          :rules="[(v) => !!v || 'End date is required']"
           label="End Date"
           required
         ></v-text-field>
@@ -107,13 +106,13 @@ const submitted = ref(false);
 
 const employer = ref({
   employerId: null,
-  employerName: "Tinker AFB",
-  position: "Technical Lead",
-  street: "123 I Can Dr.",
-  city: "Tinker AFB",
-  state: "OK",
-  zipCode: "90210",
-  beginDate: "2001-01-01",
+  employerName: "",
+  position: "",
+  street: "",
+  city: "",
+  state: "",
+  zipCode: "",
+  beginDate: "",
   endDate: "",
   salary: 135000,
 });

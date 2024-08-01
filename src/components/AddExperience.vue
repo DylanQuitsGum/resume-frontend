@@ -39,8 +39,10 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
+import { useRouter } from 'vue-router';
 import ExperienceService from "@/services/experience.service";
-import router from "../router";
+
+const router = useRouter();
 
 const user = ref(JSON.parse(localStorage.getItem("user")));
 const submitted = ref(false);
@@ -48,7 +50,7 @@ const submitted = ref(false);
 const experience = ref({
   experienceId: null,
   experienceType: "Work",
-  experienceText: "Experience Text",
+  experienceText: "",
 });
 
 const saveExperience = async () => {

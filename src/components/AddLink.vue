@@ -49,8 +49,8 @@
   
   const link = ref({
     linkId: null,
-    linkType: "GitHub",
-    linkURL: "https://github.com/DylanQuitsGum",
+    linkType: "",
+    linkURL: "",
   });
   
   const saveLink = async () => {

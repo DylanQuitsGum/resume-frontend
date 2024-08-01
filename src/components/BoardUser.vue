@@ -267,51 +267,6 @@
         </v-expansion-panel-text>
       </v-expansion-panel>
 
-      <v-expansion-panel>
-        <v-expansion-panel-title v-slot="{ expanded }">
-          <v-row no-gutters>
-            <v-col class="d-flex justify-start" cols="4"> Links </v-col>
-            <v-col class="text--secondary" cols="8">
-              <v-fade-transition leave-absolute>
-                <span v-if="expanded" key="0"> Enter your links </span>
-              </v-fade-transition>
-            </v-col>
-          </v-row>
-        </v-expansion-panel-title>
-        <v-expansion-panel-text>
-          <v-row no-gutters>
-            <v-spacer></v-spacer>
-            <v-col class="d-flex justify-start" cols="12" md="4">
-              <v-btn small @click="addLink"> Add Link </v-btn>
-            </v-col>
-            <v-col cols="12" sm="12">
-              <v-card class="mx-auto" tile>
-                <v-data-table
-                  :headers="linkHeaders"
-                  :items="userLinks"
-                  disable-pagination
-                  :hide-default-footer="true"
-                >
-                  <template v-slot:[`item.actions`]="{ item }">
-                    <v-icon small class="mr-2" @click="editLink(item.id)"
-                      >mdi-pencil</v-icon
-                    >
-                    <v-icon small class="mr-2" @click="deleteLink(item.id)"
-                      >mdi-delete</v-icon
-                    >
-                  </template>
-                </v-data-table>
-
-                <v-card-actions v-if="userLinks.length > 0">
-                  <v-btn small color="error" @click="removeAllLinks">
-                    Remove All
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-col>
-          </v-row>
-        </v-expansion-panel-text>
-      </v-expansion-panel>
     </v-expansion-panels>
   </v-container>
 </template>

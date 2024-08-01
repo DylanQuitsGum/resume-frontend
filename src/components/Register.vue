@@ -20,13 +20,6 @@
           ></v-text-field>
 
           <v-text-field
-            v-model="user.lastName"
-            label="Last Name"
-            variant="outlined"
-            required
-          ></v-text-field>
-
-          <v-text-field
             v-model="user.street"
             label="Street"
             variant="outlined"
@@ -148,17 +141,17 @@ const phoneRules = [
 ];
 
 const user = ref({
-  firstName: "Greg",
-  lastName: "Satterlee",
-  email: "greg.satterlee@gmail.com",
-  street: "13801 S Independence Ave",
-  city: "Oklahoma City",
-  state: "OK",
-  zipCode: "73170",
-  phoneNumber: "(405) 863-6222",
-  linkType: "GitHub",
-  linkURL: "https://github.com/DylanQuitsGum",
-  password: "P#ssw0rd",
+  firstName: "",
+  lastName: "",
+  email: "",
+  street: "",
+  city: "",
+  state: "",
+  zipCode: "",
+  phoneNumber: "",
+  linkType: "",
+  linkURL: "",
+  password: "",
 });
 
 async function signup() {

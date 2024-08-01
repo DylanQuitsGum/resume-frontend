@@ -45,7 +45,7 @@
 
   const duty = ref({
     dutyId: null,
-    dutyText: "GitHub",
+    dutyText: "",
   });
   
   const saveDuty = async () => {

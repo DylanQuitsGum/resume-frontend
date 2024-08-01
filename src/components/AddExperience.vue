@@ -5,7 +5,8 @@
     <div v-if="!submitted">
       <v-form ref="form" lazy-validation>
         <v-select label="Type"
-                  :items="['Leadership', 'Work', 'Activities', 'Volunteer', 'Project']">
+                  :items="['Leadership', 'Work', 'Activities', 'Volunteer', 'Project']"
+                  v-model="experience.experienceType">
         </v-select>
         <v-text-field
           variant="outlined"
@@ -46,12 +47,14 @@ const submitted = ref(false);
 
 const experience = ref({
   experienceId: null,
+  experienceType: "Work",
   experienceText: "Experience Text",
 });
 
 const saveExperience = async () => {
   var data = {
     experienceText: experience.value.experienceText,
+    experienceType: experience.value.experienceType,
     userId: user.value.id,
   };
   ExperienceService.create(user.value.id, data)

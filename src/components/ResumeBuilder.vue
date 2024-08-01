@@ -1,7 +1,7 @@
 <template>
   <v-app v-if="!showEditResume">
     <v-container>
-      <v-stepper :items="['Questions', 'Education', 'Employment', 'Skills', 'Awards', 'Select Template', 'Build']">
+      <v-stepper :items="['Questions', 'Education', 'Employment', 'Skills', 'Awards', 'Experiences', 'Select Template', 'Build']">
 
         <template v-slot:item.1>
           <v-card title="Tell us about your new career!" elevation="10">
@@ -107,6 +107,28 @@
         </template>
 
         <template v-slot:item.6>
+          <v-card title="Select Experience" elevation="10">
+            <v-data-table-virtual :items="userExperiences" 
+                                  :headers="experienceHeaders" 
+                                  item-value="item"
+                                  show-select
+                                  return-object
+                                  v-model="selectedExperiences"
+                                  disable-pagination
+              :hide-default-footer="true">
+              <template v-slot:['item.actions']="{ item }">
+
+              </template>
+            </v-data-table-virtual>
+
+            <v-card-actions>
+
+            </v-card-actions>
+
+          </v-card>
+        </template>
+
+        <template v-slot:item.7>
           <v-sheet class="mx-auto" elevation="8" max-width="800">
             <v-slide-group v-model="templateModel" class="pa-4" selected-class="bg-success" show-arrows>
               <v-slide-group-item v-for="n in 4" :key="n" v-slot="{ isSelected, toggle, selectedClass }">
@@ -123,7 +145,7 @@
           </v-sheet>
         </template>
 
-        <template v-slot:item.7>
+        <template v-slot:item.8>
           <v-card title="Build Resume" flat>
             <v-card-actions>
               <VBtn @click="buildResume">Build it</VBtn>
@@ -183,6 +205,7 @@ import AwardService from '@/services/award.service';
 import UserService from '@/services/user.service';
 import AIService from '@/services/ai.service';
 import ResumeService from '@/services/resume.service';
+import ExperienceService from '@/services/experience.service';
 import dateFormat from 'dateformat';
 import jsPDF from 'jspdf';
 
@@ -219,6 +242,9 @@ const userInformation = ref({
 });
 const userEducations = ref([]);
 const selectedEducations = ref([]);
+
+const userExperiences = ref([]);
+const selectedExperiences = ref([]);
 
 const userEmployments = ref([]);
 const selectedEmployments = ref([]);
@@ -274,6 +300,12 @@ const skillHeaders = ref([
   { title: "Skill Level", value: "skillLevel", sortable: false },
 ]);
 const experienceHeaders = ref([
+{
+    title: "Experience Type",
+    align: "start",
+    sortable: false,
+    value: "experienceType",
+  },
   {
     title: "Experience",
     align: "start",
@@ -290,11 +322,28 @@ watch(templateModel, async (newValue, oldValue) => {
 // #region Fetch Data
 
 const fetchData = async () => {
+  fetchUserExperiences();
   fetchUserEducations();
   fetchUserEmployment();
   fetchUserSkills();
   fetchUserAwards();
   fetchUserInformation();
+};
+
+const fetchUserExperiences = async() => {
+  try {
+    const res = await ExperienceService.getAll(user.id);
+    const { status, data } = res;
+
+    if (status == 200) {
+      userExperiences.value = data.map((c) => ({
+        ...c,
+        enabled: false,
+      }));
+    }
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 const fetchUserEducations = async () => {
@@ -465,8 +514,6 @@ function ProfessionalSummary() {
   } else {
     return objectiveStatement.value;
   }
-
-
 }
 
 //#region Education History
@@ -693,6 +740,71 @@ function Skills4() {
 
 // #endregion
 
+function BuildExperience(experienceType, ...experiences){
+  var experience = '';
+  var test = experiences[0];
+  for(let i = 0;i < test.length;i++){
+    var item = test[i];
+    item = JSON.parse(JSON.stringify(item))
+    if(experience == ''){
+      experience += experienceType;
+      experience += "<ul>";
+    }
+
+    experience += `<li>${item.experienceText}</li>`
+  }
+
+  if(experience != ''){
+    experience += "</ul>";
+    experience += "<br>";
+  }  
+
+  return experience;
+}
+
+function Experiences(){
+
+  var leadershipExperiences = [];
+  var workExperiences = [];
+  var activityExperiences = [];
+  var volunteerExperiences = [];
+  var projectExperiences = [];
+  for(let i = 0;i < selectedExperiences.value.length;i++){
+    var item = selectedExperiences.value[i];
+    switch(item.experienceType){
+      case 'Leadership':
+        leadershipExperiences.push(item);
+      break;
+      case 'Work':
+        workExperiences.push(item);
+      break;
+      case 'Activities':
+        activityExperiences.push(item);
+      break;
+      case 'Volunteer':
+        volunteerExperiences.push(item);
+      break;
+      case 'Project':
+        projectExperiences.push(item);
+      break;
+    }
+  }
+
+  var experience = '';
+  experience += BuildExperience('Leadership',leadershipExperiences);
+  experience += BuildExperience('Work',workExperiences);
+  experience += BuildExperience('Activities',activityExperiences);
+  experience += BuildExperience('Volunteer',volunteerExperiences);
+  experience += BuildExperience('Project',projectExperiences);
+  return experience;
+}
+
+function Awards(){
+  var awards = '';
+
+  return awards;
+}
+
 function sleep(time) {
   return new Promise((resolve) => {
     setTimeout(resolve, time || 1000);
@@ -784,8 +896,8 @@ const buildTemplate4 = async () => {
   var html = '';
   html += `<span{align=center}><bold>${UserName()}</bold></span><br>`;
   html += `${UserInfo()}<br><br>`;
-  html += "Professional Summary";
-  html += "<hr>";
+  html += "Objective";
+  html += "<br>";
   var first = true;
   while (objectiveStatement.value == undefined || objectiveStatement.value == '') {
     if (first) {
@@ -796,13 +908,15 @@ const buildTemplate4 = async () => {
   }
   html += `${ProfessionalSummary()}<br><br>`;
   html += "Education";
-  html += "<hr>";
+  html += "<br>";
   html += `${EducationHistoryTemplate4()}`;
   html += "Professional Experience";
-  html += "<hr>";
+  html += "<br>";
   html += `${ProfessionalHistory4()}`;
-  html += "Skills | Leadership Skills | Activities | Extracurricular Activies";
-  html += "<hr>";
+  html += `${Experiences()}`;
+  html += `${Awards()}`;
+  html += "Skills";
+  html += "<br>";
   html += `${Skills4()}`;
   resumeText.value = html;
   editor.value.commands.setContent(html);

@@ -4,7 +4,8 @@
 
     <v-form ref="form" lazy-validation>
       <v-select label="Type"
-                :items="['Leadership', 'Work', 'Activities', 'Volunteer', 'Project']">
+                :items="['Leadership', 'Work', 'Activities', 'Volunteer', 'Project']"
+                v-model="currentExperience.experienceType">
         </v-select>
       <v-text-field
         variant="outlined"
